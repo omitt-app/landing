@@ -248,7 +248,7 @@
     color: var(--cream);
     padding: 18px 22px;
     border-radius: var(--radius);
-    margin: 0 auto;
+    margin: 20px auto 0;
     max-width: 480px;
     font-size: 15px;
     font-weight: 600;
@@ -847,12 +847,11 @@
 
   /* --------- MOBILE (760px) --------- */
   @media (max-width: 760px) {
-    .wrap, .wrap-narrow { padding: 0 20px; }
+    .wrap, .wrap-narrow { padding: 0 24px; }
 
     /* Hero: remove forced <br/> on mobile - let text wrap naturally */
     .hero { padding: 48px 0 56px; }
-    .hero-lockup { max-width: 280px; margin-bottom: 36px; }
-    .hero h1 { font-size: 40px; line-height: 1.05; letter-spacing: -0.025em; }
+    .hero h1 { font-size: 38px; line-height: 1.08; letter-spacing: -0.022em; }
     .hero h1 br { display: none; }
     .hero .lede { font-size: 17px; margin-bottom: 32px; }
 
@@ -939,7 +938,7 @@
 
   /* --------- SMALL MOBILE (480px - iPhone SE, small Androids) --------- */
   @media (max-width: 480px) {
-    .wrap, .wrap-narrow { padding: 0 18px; }
+    .wrap, .wrap-narrow { padding: 0 22px; }
 
     /* Nav: compress */
     nav { padding: 14px 0; }
@@ -949,8 +948,7 @@
 
     /* Hero: tighter */
     .hero { padding: 32px 0 48px; }
-    .hero-lockup { max-width: 220px; margin-bottom: 28px; }
-    .hero h1 { font-size: 34px; line-height: 1.05; letter-spacing: -0.022em; }
+    .hero h1 { font-size: 30px; line-height: 1.1; letter-spacing: -0.018em; }
     .hero .lede { font-size: 16px; margin-bottom: 28px; line-height: 1.5; }
     .form-note { font-size: 12px; }
 
@@ -1057,9 +1055,7 @@
 
 <!-- =========== HERO =========== -->
 <header class="hero wrap">
-  <img class="hero-lockup" src="assets/svg/lockup-full.svg" alt="omitt - Hide sensitive data before you share." />
-
-  <h1>Hide sensitive data<br/>before you share.</h1>
+  <h1>Hide sensitive data <br/>before you share.</h1>
   <p class="lede">Drop a file. omitt redacts names, IDs, and faces right on your Mac. Paste the clean copy into ChatGPT, Claude, or anywhere. The original never moves.</p>
 
   <form class="signup" onsubmit="return handleSignup(event, 'hero')">
@@ -1106,7 +1102,7 @@
     </div>
 
     <div class="problem-callout">
-      <em>"Each time I paste a big chunk of code or logs into ChatGPT, I'm always worried it might contain an API key buried somewhere. Mistakes happen, and sometimes keys temporarily end up in code or logs."</em>
+      <em>Each time I paste a big chunk of code or logs into ChatGPT, I'm always worried it might contain an API key buried somewhere. Mistakes happen, and sometimes keys temporarily end up in code or logs.</em>
       <br/><br/>
       <strong>r/ChatGPTCoding, 2026.</strong> The "be careful" approach doesn't scale - because people are people, and AI is convenient. Samsung learned this in 2023, when three engineers pasted source code into ChatGPT in twenty days. The company banned generative AI across the org.
     </div>
@@ -1434,9 +1430,7 @@
     <img class="footer-logo" src="assets/svg/icon.svg" alt="" />
     <div class="footer-text">© 2026 omitt. A careful utility, made by humans who like privacy.</div>
     <div>
-      <a href="mailto:hello@omitt.app">Contact</a>
-      <a href="#">Privacy</a>
-      <a href="#">Twitter</a>
+      <a href="mailto:hello@omitt.app">hello@omitt.app</a>
     </div>
   </div>
 </footer>
