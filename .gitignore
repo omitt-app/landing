@@ -1,0 +1,148 @@
+# =============================================================
+# omitt - landing repo .gitignore
+# Prevents accidental commits of sensitive or unnecessary files.
+# =============================================================
+
+# -------------------------------
+# macOS system files
+# -------------------------------
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+.AppleDouble
+.LSOverride
+Icon
+
+# -------------------------------
+# Windows system files
+# -------------------------------
+Thumbs.db
+Thumbs.db:encryptable
+ehthumbs.db
+ehthumbs_vista.db
+Desktop.ini
+$RECYCLE.BIN/
+
+# -------------------------------
+# Linux system files
+# -------------------------------
+*~
+.fuse_hidden*
+.directory
+.Trash-*
+.nfs*
+
+# -------------------------------
+# Environment variables / secrets
+# -------------------------------
+.env
+.env.local
+.env.development
+.env.development.local
+.env.test
+.env.test.local
+.env.production
+.env.production.local
+.env.*.local
+*.env
+
+# -------------------------------
+# API keys & secrets (paranoia level)
+# -------------------------------
+secrets/
+*.pem
+*.key
+*.cert
+*.crt
+*.p12
+*.pfx
+credentials.json
+service-account*.json
+
+# -------------------------------
+# Editors / IDEs
+# -------------------------------
+.vscode/
+.idea/
+*.swp
+*.swo
+*.sublime-project
+*.sublime-workspace
+.history/
+*.code-workspace
+
+# -------------------------------
+# Logs
+# -------------------------------
+*.log
+logs/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+lerna-debug.log*
+
+# -------------------------------
+# Node.js (when we add tooling)
+# -------------------------------
+node_modules/
+.pnp.*
+.yarn/cache
+.yarn/unplugged
+.yarn/build-state.yml
+.yarn/install-state.gz
+jspm_packages/
+
+# -------------------------------
+# Build outputs
+# -------------------------------
+dist/
+build/
+out/
+.next/
+.nuxt/
+.cache/
+.parcel-cache/
+.turbo/
+.vercel/
+
+# -------------------------------
+# Coverage / testing
+# -------------------------------
+coverage/
+.nyc_output/
+*.lcov
+.jest-cache/
+
+# -------------------------------
+# Temporary files
+# -------------------------------
+*.tmp
+*.temp
+*.bak
+*.backup
+*.orig
+.tmp/
+
+# -------------------------------
+# Local config that varies per dev
+# -------------------------------
+local.config.*
+local.settings.*
+*.local
+
+# -------------------------------
+# Browser-specific files (rare)
+# -------------------------------
+.firefox/
+.chrome/
+
+# -------------------------------
+# Lockfiles - decision per project
+# -------------------------------
+# Uncomment if NOT using npm/yarn (we don't currently):
+# package-lock.json
+# yarn.lock
+# pnpm-lock.yaml
