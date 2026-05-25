@@ -1,0 +1,7 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1024 1024" width="1024" height="1024" role="img" aria-label="omitt mark">
+  <title>omitt mark</title>
+  <g fill="none" stroke="#0D0D0C" stroke-width="64" stroke-linecap="round">
+    <circle cx="512" cy="512" r="240"></circle>
+    <line x1="129" y1="512" x2="895" y2="512"></line>
+  </g>
+</svg>

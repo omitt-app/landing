@@ -1,0 +1,1506 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>omitt - Hide sensitive data before you share with AI</title>
+<meta name="description" content="Drop a file. omitt redacts names, IDs, and faces on your Mac before you paste into ChatGPT, Claude, or anywhere. The original never moves." />
+
+<!-- Theme color & icons -->
+<meta name="theme-color" content="#0D0D0C">
+<link rel="icon" type="image/svg+xml" href="assets/svg/favicon.svg">
+<link rel="icon" type="image/png" sizes="32x32" href="assets/png/icon-32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="assets/png/icon-16.png">
+<link rel="apple-touch-icon" sizes="180x180" href="assets/png/apple-touch-icon-180.png">
+<link rel="manifest" href="site.webmanifest">
+
+<!-- Social share -->
+<meta property="og:title" content="omitt - Hide sensitive data before you share" />
+<meta property="og:description" content="Drop any file. omitt hides what shouldn't leave your Mac before you paste into AI. The original never moves." />
+<meta property="og:type" content="website" />
+<meta property="og:url" content="https://omitt.app" />
+<meta property="og:image" content="assets/png/og-image.png">
+<meta name="twitter:card" content="summary_large_image">
+
+<!-- Font (self-hosted Nunito variable) -->
+<link rel="stylesheet" href="assets/fonts/fonts.css">
+
+<style>
+  :root {
+    --ink:        #0D0D0C;
+    --cream:      #F9F2ED;
+    --ink-soft:   rgba(13, 13, 12, 0.70);
+    --ink-mute:   rgba(13, 13, 12, 0.55);
+    --cream-soft: rgba(249, 242, 237, 0.70);
+    --cream-mute: rgba(249, 242, 237, 0.55);
+    --cream-line: rgba(249, 242, 237, 0.10);
+    --ink-line:   rgba(13, 13, 12, 0.10);
+    --radius:     14px;
+    --radius-lg:  20px;
+    --radius-pill: 999px;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html { scroll-behavior: smooth; }
+
+  body {
+    font-family: var(--font-body);
+    background: var(--ink);
+    color: var(--cream);
+    line-height: 1.55;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    font-weight: 400;
+  }
+
+  .wrap { max-width: 1120px; margin: 0 auto; padding: 0 24px; }
+  .wrap-narrow { max-width: 780px; margin: 0 auto; padding: 0 24px; }
+
+  /* ============================
+     TYPOGRAPHY
+     ============================ */
+  h1, h2, h3, h4 {
+    font-family: var(--font-display);
+    font-weight: 800;
+    line-height: 1.05;
+  }
+  h2 {
+    font-size: clamp(34px, 4.2vw, 52px);
+    letter-spacing: -0.025em;
+    line-height: 1.05;
+    margin-bottom: 16px;
+    text-align: center;
+  }
+  h3 {
+    font-size: 22px;
+    letter-spacing: -0.018em;
+  }
+  .eyebrow {
+    font-family: var(--font-body);
+    font-size: 13px;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--cream-mute);
+    margin-bottom: 18px;
+    text-align: center;
+  }
+  section.invert .eyebrow { color: var(--ink-mute); }
+  .section-sub {
+    font-size: 19px;
+    font-weight: 400;
+    text-align: center;
+    max-width: 620px;
+    margin: 0 auto 56px;
+    color: var(--cream-soft);
+  }
+  section.invert .section-sub { color: var(--ink-soft); }
+
+  /* ============================
+     NAV
+     ============================ */
+  nav {
+    padding: 16px 0;
+    border-bottom: 1px solid var(--cream-line);
+    position: sticky;
+    top: 0;
+    background: rgba(13, 13, 12, 0.85);
+    backdrop-filter: saturate(180%) blur(20px);
+    -webkit-backdrop-filter: saturate(180%) blur(20px);
+    z-index: 100;
+  }
+  nav .row {
+    display: flex; justify-content: space-between; align-items: center;
+    gap: 24px;
+  }
+  .logo {
+    display: flex; align-items: center; gap: 10px;
+    text-decoration: none;
+    color: var(--cream);
+  }
+  .logo-icon { width: 36px; height: 36px; display: block; }
+  .logo-text {
+    font-family: var(--font-display);
+    font-size: 22px;
+    font-weight: 800;
+    letter-spacing: -0.035em;
+    line-height: 1;
+  }
+  .nav-links {
+    display: flex; gap: 28px;
+    margin-left: auto; margin-right: 24px;
+  }
+  .nav-links a {
+    color: var(--cream-soft);
+    text-decoration: none;
+    font-size: 14px;
+    font-weight: 600;
+    transition: color .15s;
+  }
+  .nav-links a:hover { color: var(--cream); }
+  nav .cta {
+    background: var(--cream); color: var(--ink);
+    padding: 10px 18px; border-radius: var(--radius-pill);
+    text-decoration: none;
+    font-family: var(--font-body);
+    font-size: 14px;
+    font-weight: 700;
+    letter-spacing: -0.01em;
+    transition: opacity .15s, transform .1s;
+    white-space: nowrap;
+  }
+  nav .cta:hover { opacity: .9; }
+  nav .cta:active { transform: scale(.98); }
+
+  /* ============================
+     HERO
+     ============================ */
+  .hero {
+    padding: 96px 0 80px;
+    text-align: center;
+  }
+  .hero-lockup {
+    width: 100%;
+    max-width: 460px;
+    height: auto;
+    display: block;
+    margin: 0 auto 48px;
+  }
+  .hero h1 {
+    font-size: clamp(42px, 6.2vw, 78px);
+    font-weight: 800;
+    letter-spacing: -0.030em;
+    line-height: 1.0;
+    margin-bottom: 22px;
+    color: var(--cream);
+  }
+  .hero .lede {
+    font-size: clamp(18px, 1.8vw, 22px);
+    color: var(--cream-soft);
+    max-width: 640px;
+    margin: 0 auto 40px;
+    font-weight: 400;
+  }
+  .hero .lede kbd {
+    font-family: var(--font-body);
+    font-size: 0.85em;
+    padding: 2px 8px;
+    border: 1px solid var(--cream-line);
+    border-radius: 6px;
+    background: rgba(249, 242, 237, 0.06);
+    color: var(--cream);
+    font-weight: 500;
+  }
+
+  /* ============================
+     FORM
+     ============================ */
+  form.signup {
+    display: flex; gap: 8px;
+    max-width: 480px; margin: 0 auto;
+    flex-wrap: wrap;
+    justify-content: center;
+  }
+  form.signup input[type="email"] {
+    flex: 1; min-width: 240px;
+    padding: 15px 18px;
+    font-family: var(--font-body);
+    font-size: 16px;
+    font-weight: 400;
+    border: 1px solid var(--cream-line);
+    border-radius: var(--radius);
+    background: rgba(249, 242, 237, 0.06);
+    color: var(--cream);
+    outline: none;
+    transition: border-color .15s, background .15s;
+  }
+  form.signup input[type="email"]::placeholder { color: var(--cream-mute); }
+  form.signup input[type="email"]:focus {
+    border-color: var(--cream);
+    background: rgba(249, 242, 237, 0.1);
+  }
+  form.signup button {
+    padding: 15px 28px;
+    font-family: var(--font-body);
+    font-size: 16px; font-weight: 700;
+    background: var(--cream);
+    color: var(--ink);
+    border: none;
+    border-radius: var(--radius);
+    cursor: pointer;
+    letter-spacing: -0.01em;
+    transition: opacity .15s, transform .1s;
+    white-space: nowrap;
+  }
+  form.signup button:hover { opacity: .9; }
+  form.signup button:active { transform: scale(.98); }
+  .form-note {
+    font-size: 13px;
+    font-weight: 500;
+    color: var(--cream-mute);
+    margin-top: 14px;
+  }
+  section.invert .form-note { color: var(--ink-mute); }
+  .form-success {
+    display: none;
+    background: rgba(249, 242, 237, 0.08);
+    border: 1px solid var(--cream-line);
+    color: var(--cream);
+    padding: 18px 22px;
+    border-radius: var(--radius);
+    margin: 0 auto;
+    max-width: 480px;
+    font-size: 15px;
+    font-weight: 600;
+    text-align: center;
+  }
+  .form-success.show { display: block; }
+  section.invert .form-success {
+    background: rgba(13, 13, 12, 0.06);
+    border-color: var(--ink-line);
+    color: var(--ink);
+  }
+
+  /* ============================
+     DEMO PLACEHOLDER
+     ============================ */
+  .demo {
+    margin: 72px auto 0;
+    max-width: 920px;
+    aspect-ratio: 16/9;
+    background: rgba(249, 242, 237, 0.04);
+    border: 1px solid var(--cream-line);
+    border-radius: var(--radius-lg);
+    display: flex; align-items: center; justify-content: center;
+    color: var(--cream-mute);
+  }
+  .demo-placeholder {
+    text-align: center;
+    font-size: 15px;
+    font-weight: 500;
+  }
+  .demo-placeholder svg {
+    width: 48px; height: 48px;
+    margin-bottom: 14px;
+    opacity: .5;
+    color: var(--cream);
+  }
+
+  /* ============================
+     SECTIONS
+     ============================ */
+  section { padding: 110px 0; }
+  section.invert {
+    background: var(--cream);
+    color: var(--ink);
+  }
+
+  /* ============================
+     PROBLEM (numbers)
+     ============================ */
+  .stat-row {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 24px;
+    margin-bottom: 56px;
+  }
+  .stat-card {
+    background: rgba(249, 242, 237, 0.05);
+    border: 1px solid var(--cream-line);
+    border-radius: var(--radius-lg);
+    padding: 36px 28px;
+    text-align: left;
+  }
+  .stat-num {
+    font-family: var(--font-display);
+    font-size: 56px;
+    font-weight: 800;
+    letter-spacing: -0.035em;
+    line-height: 1;
+    margin-bottom: 14px;
+    color: var(--cream);
+  }
+  .stat-label {
+    font-size: 16px;
+    font-weight: 400;
+    color: var(--cream-soft);
+    line-height: 1.4;
+  }
+  .stat-source {
+    font-size: 12px;
+    font-weight: 500;
+    color: var(--cream-mute);
+    margin-top: 14px;
+    letter-spacing: 0.01em;
+  }
+  .problem-callout {
+    background: rgba(249, 242, 237, 0.04);
+    border-left: 3px solid var(--cream);
+    padding: 26px 30px;
+    border-radius: 0 var(--radius) var(--radius) 0;
+    margin: 0 auto;
+    max-width: 760px;
+    font-size: 16px;
+    font-weight: 500;
+    color: var(--cream-soft);
+    line-height: 1.55;
+  }
+  .problem-callout em {
+    display: block;
+    font-style: italic;
+    font-weight: 500;
+    font-size: 19px;
+    color: var(--cream);
+    margin-bottom: 6px;
+    line-height: 1.45;
+  }
+  .problem-callout em::before { content: "\201C"; margin-right: 2px; }
+  .problem-callout em::after { content: "\201D"; margin-left: 2px; }
+  .problem-callout strong { color: var(--cream); font-weight: 700; }
+
+  /* ============================
+     STEPS
+     ============================ */
+  .steps {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 24px;
+  }
+  .step {
+    padding: 36px 28px;
+    border-radius: var(--radius-lg);
+    background: var(--ink);
+    color: var(--cream);
+  }
+  section.invert .step { background: var(--ink); color: var(--cream); }
+  .step-num {
+    display: inline-flex;
+    width: 32px; height: 32px;
+    align-items: center; justify-content: center;
+    border-radius: 50%;
+    font-family: var(--font-display);
+    font-size: 14px; font-weight: 800;
+    margin-bottom: 22px;
+    background: var(--cream);
+    color: var(--ink);
+  }
+  .step h3 {
+    color: var(--cream);
+    margin-bottom: 10px;
+  }
+  .step p {
+    font-size: 16px;
+    color: var(--cream-soft);
+  }
+
+  /* ============================
+     USE CASES (BENTO)
+     ============================ */
+  .bento {
+    display: grid;
+    grid-template-columns: repeat(6, 1fr);
+    grid-auto-rows: minmax(180px, auto);
+    gap: 14px;
+    max-width: 1080px;
+    margin: 0 auto;
+  }
+  .bento-card {
+    background: rgba(249, 242, 237, 0.05);
+    border: 1px solid var(--cream-line);
+    border-radius: var(--radius-lg);
+    padding: 28px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    transition: background .15s, border-color .15s, transform .15s;
+  }
+  .bento-card:hover {
+    background: rgba(249, 242, 237, 0.08);
+    border-color: rgba(249, 242, 237, 0.18);
+    transform: translateY(-2px);
+  }
+  .bento-card .tag {
+    font-family: var(--font-body);
+    font-size: 12px;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--cream-mute);
+    margin-bottom: 14px;
+  }
+  .bento-card h3 {
+    font-family: var(--font-display);
+    font-size: 22px;
+    font-weight: 800;
+    letter-spacing: -0.018em;
+    line-height: 1.15;
+    margin-bottom: 12px;
+    color: var(--cream);
+  }
+  .bento-card p {
+    font-size: 15px;
+    color: var(--cream-soft);
+    line-height: 1.5;
+  }
+  .bento-c1 { grid-column: span 3; }
+  .bento-c2 { grid-column: span 3; }
+  .bento-c3 { grid-column: span 2; }
+  .bento-c4 { grid-column: span 2; }
+  .bento-c5 { grid-column: span 2; }
+  .bento-c6 { grid-column: span 6; }
+  .bento-c6 {
+    background: var(--cream);
+    color: var(--ink);
+    border-color: transparent;
+    text-align: center;
+    padding: 36px;
+  }
+  .bento-c6 h3 { color: var(--ink); font-size: 28px; }
+  .bento-c6 p { color: var(--ink-soft); font-size: 17px; max-width: 540px; margin: 0 auto; }
+  .bento-c6 .tag { color: var(--ink-mute); }
+
+  /* ============================
+     DETECT GRID
+     ============================ */
+  .detects {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 14px;
+    max-width: 920px;
+    margin: 0 auto;
+  }
+  .detect {
+    background: rgba(13, 13, 12, 0.05);
+    border: 1px solid var(--ink-line);
+    color: var(--ink);
+    padding: 28px 18px;
+    border-radius: var(--radius);
+    text-align: center;
+    transition: border-color .15s, background .15s;
+  }
+  section:not(.invert) .detect {
+    background: rgba(249, 242, 237, 0.05);
+    border-color: var(--cream-line);
+    color: var(--cream);
+  }
+  .detect:hover {
+    background: rgba(13, 13, 12, 0.09);
+    border-color: rgba(13, 13, 12, 0.2);
+  }
+  section:not(.invert) .detect:hover {
+    background: rgba(249, 242, 237, 0.08);
+    border-color: rgba(249, 242, 237, 0.2);
+  }
+  .detect svg {
+    width: 26px; height: 26px;
+    margin-bottom: 12px;
+    color: currentColor;
+  }
+  .detect-label {
+    font-family: var(--font-body);
+    font-size: 14px;
+    font-weight: 700;
+    letter-spacing: -0.01em;
+  }
+
+  /* ============================
+     COMPARISON TABLE
+     ============================ */
+  .compare-wrap {
+    overflow-x: auto;
+    max-width: 980px;
+    margin: 0 auto;
+  }
+  table.compare {
+    width: 100%;
+    border-collapse: separate;
+    border-spacing: 0;
+    background: rgba(249, 242, 237, 0.04);
+    border: 1px solid var(--cream-line);
+    border-radius: var(--radius-lg);
+    overflow: hidden;
+    font-size: 15px;
+  }
+  table.compare th, table.compare td {
+    padding: 16px 18px;
+    text-align: left;
+    border-bottom: 1px solid var(--cream-line);
+  }
+  table.compare th {
+    font-family: var(--font-body);
+    font-weight: 700;
+    color: var(--cream-soft);
+    font-size: 13px;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+    background: rgba(249, 242, 237, 0.03);
+  }
+  table.compare th:first-child, table.compare td:first-child {
+    font-weight: 700;
+    color: var(--cream);
+  }
+  table.compare .col-omitt {
+    background: rgba(249, 242, 237, 0.07);
+    color: var(--cream);
+    font-weight: 600;
+  }
+  table.compare tbody tr:last-child td { border-bottom: none; }
+  table.compare td {
+    color: var(--cream-soft);
+  }
+  table.compare td.good { color: var(--cream); font-weight: 600; }
+  table.compare td.bad { color: var(--cream-mute); }
+
+  /* ============================
+     PRIVACY PROMISE
+     ============================ */
+  .promise {
+    max-width: 760px;
+    margin: 0 auto;
+    text-align: center;
+  }
+  .promise-stat {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 24px;
+    margin-top: 48px;
+  }
+  .promise-stat .stat-num { color: var(--ink); font-size: 64px; }
+  .promise-stat .stat-label { color: var(--ink-soft); }
+
+  /* ============================
+     PRICING
+     ============================ */
+  .pricing {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 16px;
+    max-width: 1000px;
+    margin: 0 auto;
+  }
+  .price-card {
+    background: rgba(249, 242, 237, 0.04);
+    border: 1px solid var(--cream-line);
+    border-radius: var(--radius-lg);
+    padding: 36px 28px;
+    display: flex;
+    flex-direction: column;
+    transition: border-color .15s, background .15s;
+  }
+  .price-card.featured {
+    border-color: var(--cream);
+    background: rgba(249, 242, 237, 0.08);
+    position: relative;
+  }
+  .price-card.featured::before {
+    content: "Recommended";
+    position: absolute;
+    top: -12px;
+    left: 24px;
+    background: var(--cream);
+    color: var(--ink);
+    font-family: var(--font-body);
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    padding: 5px 12px;
+    border-radius: var(--radius-pill);
+  }
+  .price-tier {
+    font-family: var(--font-body);
+    font-size: 13px;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--cream-mute);
+    margin-bottom: 16px;
+  }
+  .price-amount {
+    font-family: var(--font-display);
+    font-size: 48px;
+    font-weight: 800;
+    letter-spacing: -0.035em;
+    line-height: 1;
+    color: var(--cream);
+    margin-bottom: 6px;
+  }
+  .price-amount sup {
+    font-size: 22px;
+    font-weight: 700;
+    vertical-align: super;
+    margin-right: 2px;
+  }
+  .price-period {
+    font-size: 14px;
+    font-weight: 500;
+    color: var(--cream-mute);
+    margin-bottom: 24px;
+  }
+  .price-desc {
+    font-size: 15px;
+    color: var(--cream-soft);
+    margin-bottom: 26px;
+    line-height: 1.5;
+    min-height: 48px;
+  }
+  .price-features {
+    list-style: none;
+    margin-bottom: 28px;
+    flex: 1;
+  }
+  .price-features li {
+    padding: 8px 0;
+    font-size: 14px;
+    color: var(--cream-soft);
+    display: flex;
+    align-items: flex-start;
+    gap: 10px;
+  }
+  .price-features li::before {
+    content: "";
+    width: 14px; height: 14px;
+    border-radius: 50%;
+    background: rgba(249, 242, 237, 0.15);
+    flex-shrink: 0;
+    margin-top: 5px;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 14 14' fill='none' stroke='%23F9F2ED' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M3 7l3 3 5-6'/%3E%3C/svg%3E");
+    background-size: contain;
+  }
+  .price-cta {
+    display: block;
+    text-align: center;
+    padding: 13px 20px;
+    font-family: var(--font-body);
+    font-size: 15px;
+    font-weight: 700;
+    text-decoration: none;
+    border-radius: var(--radius);
+    border: 1px solid var(--cream-line);
+    color: var(--cream);
+    transition: background .15s, border-color .15s;
+  }
+  .price-cta:hover {
+    background: rgba(249, 242, 237, 0.1);
+    border-color: var(--cream-soft);
+  }
+  .price-card.featured .price-cta {
+    background: var(--cream);
+    color: var(--ink);
+    border-color: var(--cream);
+  }
+  .price-card.featured .price-cta:hover {
+    opacity: 0.92;
+  }
+  .pricing-note {
+    text-align: center;
+    margin-top: 32px;
+    font-size: 14px;
+    color: var(--cream-mute);
+  }
+
+  /* ============================
+     FAQ
+     ============================ */
+  .faq {
+    max-width: 760px;
+    margin: 0 auto;
+  }
+  details.faq-item {
+    border-bottom: 1px solid var(--cream-line);
+    padding: 4px 0;
+  }
+  details.faq-item:first-of-type { border-top: 1px solid var(--cream-line); }
+  details.faq-item summary {
+    padding: 22px 0;
+    cursor: pointer;
+    font-family: var(--font-display);
+    font-size: 18px;
+    font-weight: 800;
+    letter-spacing: -0.015em;
+    color: var(--cream);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 16px;
+    list-style: none;
+  }
+  details.faq-item summary::-webkit-details-marker { display: none; }
+  details.faq-item summary::after {
+    content: "+";
+    font-family: var(--font-display);
+    font-weight: 800;
+    font-size: 22px;
+    color: var(--cream-soft);
+    transition: transform .2s;
+  }
+  details.faq-item[open] summary::after { content: "−"; }
+  details.faq-item p {
+    padding: 0 0 24px;
+    font-size: 16px;
+    color: var(--cream-soft);
+    line-height: 1.55;
+  }
+
+  /* ============================
+     FINAL CTA
+     ============================ */
+  .cta-final {
+    text-align: center;
+    padding: 120px 24px;
+  }
+  .cta-final h2 { color: var(--cream); }
+  .cta-final .lede {
+    color: var(--cream-soft);
+    font-size: 19px;
+    margin-bottom: 40px;
+    max-width: 560px;
+    margin-left: auto;
+    margin-right: auto;
+  }
+
+  /* ============================
+     MOBILE STICKY CTA
+     ============================ */
+  .mobile-sticky-cta {
+    display: none;
+  }
+  @media (max-width: 760px) {
+    .mobile-sticky-cta {
+      display: block;
+      position: fixed;
+      bottom: 16px;
+      left: 50%;
+      transform: translateX(calc(-50% + 0px));
+      background: var(--cream);
+      color: var(--ink);
+      padding: 13px 26px;
+      border-radius: var(--radius-pill);
+      text-decoration: none;
+      font-family: var(--font-body);
+      font-weight: 700;
+      font-size: 15px;
+      letter-spacing: -0.01em;
+      box-shadow: 0 10px 28px rgba(0,0,0,0.35);
+      z-index: 80;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity .25s ease, transform .25s ease;
+    }
+    .mobile-sticky-cta.show {
+      opacity: 1;
+      pointer-events: auto;
+    }
+    .mobile-sticky-cta:active { transform: translateX(-50%) scale(.97); }
+  }
+
+  /* ============================
+     FOOTER
+     ============================ */
+  footer {
+    padding: 56px 0 40px;
+    text-align: center;
+    color: var(--cream-mute);
+    font-size: 13px;
+    border-top: 1px solid var(--cream-line);
+  }
+  footer .footer-logo {
+    width: 32px; height: 32px;
+    margin: 0 auto 18px;
+    display: block;
+    opacity: 0.7;
+  }
+  footer .footer-text {
+    font-weight: 500;
+    margin-bottom: 12px;
+  }
+  footer a {
+    color: var(--cream-mute);
+    text-decoration: none;
+    margin: 0 12px;
+    font-weight: 600;
+    transition: color .15s;
+  }
+  footer a:hover { color: var(--cream); }
+
+  /* ============================
+     RESPONSIVE - LAYERED MOBILE STRATEGY
+     ============================ */
+
+  /* --------- TABLET / SMALL DESKTOP (900px) --------- */
+  @media (max-width: 900px) {
+    .wrap, .wrap-narrow { padding: 0 22px; }
+    .nav-links { display: none; }
+    nav .cta { padding: 9px 15px; font-size: 13px; }
+
+    .bento { grid-template-columns: repeat(2, 1fr); }
+    .bento-c1, .bento-c2, .bento-c3, .bento-c4, .bento-c5 { grid-column: span 1; }
+    .bento-c6 { grid-column: span 2; }
+
+    .stat-row { grid-template-columns: 1fr; }
+    .pricing { grid-template-columns: 1fr; max-width: 480px; }
+    .price-card.featured { order: -1; }
+
+    section { padding: 96px 0; }
+    h2 { font-size: clamp(30px, 5vw, 42px); }
+  }
+
+  /* --------- MOBILE (760px) --------- */
+  @media (max-width: 760px) {
+    .wrap, .wrap-narrow { padding: 0 20px; }
+
+    /* Hero: remove forced <br/> on mobile - let text wrap naturally */
+    .hero { padding: 48px 0 56px; }
+    .hero-lockup { max-width: 280px; margin-bottom: 36px; }
+    .hero h1 { font-size: 40px; line-height: 1.05; letter-spacing: -0.025em; }
+    .hero h1 br { display: none; }
+    .hero .lede { font-size: 17px; margin-bottom: 32px; }
+
+    /* Form: stack vertically on mobile to prevent overflow */
+    form.signup { flex-direction: column; max-width: 380px; }
+    form.signup input[type="email"] {
+      min-width: 0;
+      width: 100%;
+      padding: 14px 16px;
+      font-size: 16px; /* prevents iOS zoom on focus */
+    }
+    form.signup button { width: 100%; padding: 14px 20px; }
+
+    /* Sections */
+    section { padding: 72px 0; }
+    h2 { font-size: 32px; line-height: 1.08; letter-spacing: -0.02em; }
+    .section-sub { font-size: 17px; margin-bottom: 40px; }
+    .eyebrow { font-size: 12px; margin-bottom: 14px; }
+
+    /* Problem stats: compact */
+    .stat-card { padding: 30px 24px; }
+    .stat-num { font-size: 44px; }
+    .stat-label { font-size: 15px; }
+    .problem-callout { font-size: 16px; padding: 20px 22px; }
+
+    /* Steps */
+    .steps { grid-template-columns: 1fr; gap: 16px; }
+    .step { padding: 30px 24px; }
+    .step h3 { font-size: 20px; }
+
+    /* Use cases bento - 1 column */
+    .bento { grid-template-columns: 1fr; gap: 12px; }
+    .bento-c1, .bento-c2, .bento-c3, .bento-c4, .bento-c5, .bento-c6 { grid-column: span 1; }
+    .bento-card { padding: 24px; min-height: 0; }
+    .bento-card h3 { font-size: 20px; line-height: 1.2; }
+    .bento-card p { font-size: 14px; }
+    .bento-c6 { padding: 28px 24px; }
+    .bento-c6 h3 { font-size: 22px; }
+    .bento-c6 p { font-size: 15px; }
+
+    /* Detect grid - 2 columns */
+    .detects { grid-template-columns: repeat(2, 1fr); gap: 12px; }
+    .detect { padding: 22px 14px; }
+
+    /* Compare table: scroll hint */
+    .compare-wrap {
+      position: relative;
+      margin: 0 -20px; /* extend table edges to viewport */
+      padding: 0 20px;
+    }
+    .compare-wrap::after {
+      content: "← swipe to compare →";
+      display: block;
+      text-align: center;
+      font-size: 12px;
+      font-weight: 500;
+      color: var(--cream-mute);
+      margin-top: 14px;
+      letter-spacing: 0.04em;
+    }
+    table.compare { font-size: 13px; min-width: 560px; }
+    table.compare th, table.compare td { padding: 12px 10px; }
+
+    /* Promise */
+    .promise-stat { grid-template-columns: 1fr; gap: 30px; }
+    .promise-stat .stat-num { font-size: 52px; }
+
+    /* Pricing */
+    .price-card { padding: 30px 24px; }
+    .price-amount { font-size: 44px; }
+    .price-features { margin-bottom: 24px; }
+
+    /* FAQ */
+    .faq details.faq-item summary { font-size: 17px; padding: 20px 0; }
+    .faq details.faq-item p { font-size: 15px; padding-bottom: 20px; }
+
+    /* CTA final */
+    .cta-final { padding: 80px 20px; }
+    .cta-final .lede { font-size: 17px; margin-bottom: 32px; }
+
+    /* Footer */
+    footer { padding: 40px 0 32px; }
+  }
+
+  /* --------- SMALL MOBILE (480px - iPhone SE, small Androids) --------- */
+  @media (max-width: 480px) {
+    .wrap, .wrap-narrow { padding: 0 18px; }
+
+    /* Nav: compress */
+    nav { padding: 14px 0; }
+    .logo-icon { width: 32px; height: 32px; }
+    .logo-text { font-size: 19px; }
+    nav .cta { padding: 8px 13px; font-size: 12px; }
+
+    /* Hero: tighter */
+    .hero { padding: 32px 0 48px; }
+    .hero-lockup { max-width: 220px; margin-bottom: 28px; }
+    .hero h1 { font-size: 34px; line-height: 1.05; letter-spacing: -0.022em; }
+    .hero .lede { font-size: 16px; margin-bottom: 28px; line-height: 1.5; }
+    .form-note { font-size: 12px; }
+
+    /* Demo placeholder */
+    .demo { margin: 48px auto 0; border-radius: 14px; }
+    .demo-placeholder svg { width: 40px; height: 40px; }
+    .demo-placeholder div { font-size: 14px; }
+
+    /* Section type */
+    section { padding: 64px 0; }
+    h2 { font-size: 28px; line-height: 1.1; }
+    .section-sub { font-size: 16px; margin-bottom: 36px; }
+
+    /* Stats */
+    .stat-card { padding: 26px 22px; }
+    .stat-num { font-size: 40px; }
+    .stat-label { font-size: 14px; }
+    .stat-source { font-size: 11px; }
+    .problem-callout { font-size: 15px; padding: 18px 20px; }
+
+    /* Steps */
+    .step { padding: 26px 22px; }
+    .step h3 { font-size: 19px; }
+    .step p { font-size: 15px; }
+
+    /* Bento */
+    .bento-card { padding: 22px 20px; }
+    .bento-card h3 { font-size: 19px; }
+    .bento-card p { font-size: 14px; }
+    .bento-card .tag { font-size: 11px; }
+    .bento-c6 { padding: 26px 22px; }
+    .bento-c6 h3 { font-size: 20px; }
+
+    /* Detects: keep 2 columns but smaller */
+    .detect { padding: 20px 12px; }
+    .detect-label { font-size: 13px; }
+
+    /* Compare */
+    table.compare { font-size: 12px; min-width: 520px; }
+    table.compare th, table.compare td { padding: 10px 8px; }
+
+    /* Promise */
+    .promise-stat .stat-num { font-size: 46px; }
+
+    /* Pricing */
+    .price-card { padding: 28px 22px; }
+    .price-card.featured::before {
+      font-size: 10px;
+      padding: 4px 10px;
+      left: 22px;
+    }
+    .price-amount { font-size: 40px; }
+    .price-amount sup { font-size: 19px; }
+    .price-tier { font-size: 12px; }
+    .price-desc { font-size: 14px; min-height: 0; }
+    .price-features li { font-size: 13px; padding: 7px 0; }
+    .price-cta { padding: 12px 18px; font-size: 14px; }
+
+    /* FAQ */
+    .faq details.faq-item summary { font-size: 16px; padding: 18px 0; }
+    .faq details.faq-item summary::after { font-size: 20px; }
+    .faq details.faq-item p { font-size: 14px; padding-bottom: 18px; }
+
+    /* CTA final */
+    .cta-final { padding: 64px 18px; }
+    .cta-final .lede { font-size: 16px; }
+
+    /* Footer */
+    footer { padding: 32px 0 28px; font-size: 12px; }
+    footer .footer-logo { width: 28px; height: 28px; margin-bottom: 14px; }
+    footer a { margin: 0 8px; font-size: 12px; }
+  }
+</style>
+</head>
+<body>
+
+<!-- Hidden sprite for category icons -->
+<svg style="display:none" aria-hidden="true">
+  <symbol id="i-full-names" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="9" r="3.5"/><path d="M5 20c.8-3.4 3.6-5.4 7-5.4s6.2 2 7 5.4"/></symbol>
+  <symbol id="i-passport-id" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="5" width="18" height="14" rx="2"/><rect x="6" y="8.5" width="4.5" height="5" rx=".5"/><line x1="12.5" y1="10" x2="18" y2="10"/><line x1="12.5" y1="12.5" x2="18" y2="12.5"/></symbol>
+  <symbol id="i-card-numbers" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><rect x="2.5" y="5.5" width="19" height="13" rx="2"/><line x1="2.5" y1="9.5" x2="21.5" y2="9.5"/><rect x="5" y="12.5" width="3.5" height="3" rx=".5"/></symbol>
+  <symbol id="i-emails" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><rect x="2.5" y="5" width="19" height="14" rx="2"/><path d="M3.25 7l8.75 6.25L20.75 7"/></symbol>
+  <symbol id="i-phone-numbers" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><rect x="6" y="2.5" width="12" height="19" rx="2.5"/><line x1="10" y1="5.5" x2="14" y2="5.5"/><circle cx="12" cy="18.5" r=".9" fill="currentColor" stroke="none"/></symbol>
+  <symbol id="i-addresses" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M3 11.5L12 3.5l9 8v9a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1z"/><path d="M9.5 21v-5.5a1 1 0 0 1 1-1h3a1 1 0 0 1 1 1V21"/></symbol>
+  <symbol id="i-faces" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M4 8V6a2 2 0 0 1 2-2h2 M16 4h2a2 2 0 0 1 2 2v2 M20 16v2a2 2 0 0 1-2 2h-2 M8 20H6a2 2 0 0 1-2-2v-2"/><circle cx="12" cy="12" r="3.2"/></symbol>
+  <symbol id="i-signatures" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M4 14.5c0-2.5 3-3.5 4-1.5s-2 4.5 0 4.5 4-3 6-3 1.5 3 3.5 2.5 3.5-2 3.5-2"/><path d="M3 20.5h18"/></symbol>
+</svg>
+
+<!-- =========== NAV =========== -->
+<nav>
+  <div class="wrap row">
+    <a href="#" class="logo" aria-label="omitt home">
+      <img class="logo-icon" src="assets/svg/icon.svg" alt="" />
+      <span class="logo-text">omitt</span>
+    </a>
+    <div class="nav-links">
+      <a href="#use-cases">Use cases</a>
+      <a href="#pricing">Pricing</a>
+      <a href="#faq">FAQ</a>
+    </div>
+    <a href="#access" class="cta">Get early access</a>
+  </div>
+</nav>
+
+<!-- =========== HERO =========== -->
+<header class="hero wrap">
+  <img class="hero-lockup" src="assets/svg/lockup-full.svg" alt="omitt - Hide sensitive data before you share." />
+
+  <h1>Hide sensitive data<br/>before you share.</h1>
+  <p class="lede">Drop a file. omitt redacts names, IDs, and faces right on your Mac. Paste the clean copy into ChatGPT, Claude, or anywhere. The original never moves.</p>
+
+  <form class="signup" onsubmit="return handleSignup(event, 'hero')">
+    <input type="email" name="email" placeholder="your@work-email.com" required aria-label="Email" />
+    <button type="submit">Get early access</button>
+  </form>
+  <div class="form-note">On-device. No uploads. Early access users get Pro free for life.</div>
+  <div class="form-success" id="success-hero">Thanks. You're on the list. We'll email when the beta opens.</div>
+
+  <div class="demo">
+    <div class="demo-placeholder">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+        <polygon points="5 3 19 12 5 21 5 3"/>
+      </svg>
+      <div>30-second demo coming soon</div>
+    </div>
+  </div>
+</header>
+
+<!-- =========== PROBLEM =========== -->
+<section>
+  <div class="wrap">
+    <div class="eyebrow">The quiet problem</div>
+    <h2>Your team uses AI.<br/>Most of what gets pasted shouldn't.</h2>
+    <p class="section-sub">By the time you notice a sensitive line went into ChatGPT, it's already on someone else's server.</p>
+
+    <div class="stat-row">
+      <div class="stat-card">
+        <div class="stat-num">70%</div>
+        <div class="stat-label">of employees use AI tools for work</div>
+        <div class="stat-source">Unseen Security, 2026</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-num">858K</div>
+        <div class="stat-label">AI-related data loss events tracked in one year</div>
+        <div class="stat-source">Verizon DBIR, 2026</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-num">$0</div>
+        <div class="stat-label">amount you can spend to undo a paste after the fact</div>
+        <div class="stat-source">Federal Court SDNY, Feb 2026</div>
+      </div>
+    </div>
+
+    <div class="problem-callout">
+      <em>"Each time I paste a big chunk of code or logs into ChatGPT, I'm always worried it might contain an API key buried somewhere. Mistakes happen, and sometimes keys temporarily end up in code or logs."</em>
+      <br/><br/>
+      <strong>r/ChatGPTCoding, 2026.</strong> The "be careful" approach doesn't scale - because people are people, and AI is convenient. Samsung learned this in 2023, when three engineers pasted source code into ChatGPT in twenty days. The company banned generative AI across the org.
+    </div>
+  </div>
+</section>
+
+<!-- =========== SOLUTION =========== -->
+<section class="invert">
+  <div class="wrap">
+    <div class="eyebrow">How it works</div>
+    <h2>Three seconds. No upload.</h2>
+    <p class="section-sub">Built for the moment between "I need to ask AI" and "wait, this has my passport on it."</p>
+
+    <div class="steps">
+      <div class="step">
+        <div class="step-num">1</div>
+        <h3>Drop or hotkey</h3>
+        <p>Press Cmd+Shift+B from anywhere. Drag a PDF, image, or screenshot into the window.</p>
+      </div>
+      <div class="step">
+        <div class="step-num">2</div>
+        <h3>Review the highlights</h3>
+        <p>omitt marks every name, ID, card and address it finds. Toggle each one. Add your own with one click.</p>
+      </div>
+      <div class="step">
+        <div class="step-num">3</div>
+        <h3>Paste into AI</h3>
+        <p>The clean copy lands in your clipboard. Cmd+V into ChatGPT, Claude, Gemini, or anywhere. The original never moves.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- =========== USE CASES (BENTO) =========== -->
+<section id="use-cases">
+  <div class="wrap">
+    <div class="eyebrow">Use cases</div>
+    <h2>For people who can't<br/>afford a "whoops."</h2>
+    <p class="section-sub">Different jobs, same five seconds before each paste.</p>
+
+    <div class="bento">
+      <div class="bento-card bento-c1">
+        <div>
+          <div class="tag">For lawyers</div>
+          <h3>Redact the case file<br/>before AI research.</h3>
+        </div>
+        <p>Client names, addresses, SSNs are blurred locally. Privilege stays where it belongs - in your office.</p>
+      </div>
+      <div class="bento-card bento-c2">
+        <div>
+          <div class="tag">For accountants &amp; CPAs</div>
+          <h3>Scrub the return<br/>before AI review.</h3>
+        </div>
+        <p>SSNs, account numbers, addresses and income figures redacted locally. Your AICPA duty of confidentiality stays clean.</p>
+      </div>
+      <div class="bento-card bento-c3">
+        <div>
+          <div class="tag">For engineers</div>
+          <h3>Strip PII from logs.</h3>
+        </div>
+        <p>Customer emails, IPs, API keys gone before pasting into Claude for a debug.</p>
+      </div>
+      <div class="bento-card bento-c4">
+        <div>
+          <div class="tag">For consultants</div>
+          <h3>Clean the deck.</h3>
+        </div>
+        <p>Client names and proprietary numbers out before you ask AI to summarize. Your NDA stays clean.</p>
+      </div>
+      <div class="bento-card bento-c5">
+        <div>
+          <div class="tag">For HR</div>
+          <h3>Hide the candidate.</h3>
+        </div>
+        <p>Names, photos, ages off the resume before AI screens it. Lower bias. Lower EEOC exposure.</p>
+      </div>
+      <div class="bento-card bento-c6">
+        <div>
+          <div class="tag">For everyone else</div>
+          <h3>If it shouldn't be public, omitt it first.</h3>
+        </div>
+        <p>You don't need to be a lawyer to want one fewer thing to worry about before hitting Send.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- =========== DETECT GRID =========== -->
+<section class="invert">
+  <div class="wrap">
+    <div class="eyebrow">What it sees</div>
+    <h2>Finds what you'd forget.</h2>
+    <p class="section-sub">Trained on the things people regret sharing. Add your own categories in one click.</p>
+
+    <div class="detects">
+      <div class="detect"><svg><use href="#i-full-names"/></svg><div class="detect-label">Full names</div></div>
+      <div class="detect"><svg><use href="#i-passport-id"/></svg><div class="detect-label">Passport &amp; ID</div></div>
+      <div class="detect"><svg><use href="#i-card-numbers"/></svg><div class="detect-label">Card numbers</div></div>
+      <div class="detect"><svg><use href="#i-emails"/></svg><div class="detect-label">Emails</div></div>
+      <div class="detect"><svg><use href="#i-phone-numbers"/></svg><div class="detect-label">Phone numbers</div></div>
+      <div class="detect"><svg><use href="#i-addresses"/></svg><div class="detect-label">Addresses</div></div>
+      <div class="detect"><svg><use href="#i-faces"/></svg><div class="detect-label">Faces</div></div>
+      <div class="detect"><svg><use href="#i-signatures"/></svg><div class="detect-label">Signatures</div></div>
+    </div>
+  </div>
+</section>
+
+<!-- =========== COMPARISON =========== -->
+<section>
+  <div class="wrap">
+    <div class="eyebrow">Why not just&hellip;</div>
+    <h2>The other ways<br/>don't do this.</h2>
+    <p class="section-sub">There are four paths. Three of them keep your data moving. One keeps it home.</p>
+
+    <div class="compare-wrap">
+      <table class="compare">
+        <thead>
+          <tr>
+            <th></th>
+            <th>ChatGPT Enterprise</th>
+            <th>Cloud redaction tools</th>
+            <th class="col-omitt">omitt</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>Cost</td>
+            <td>$60 / user / mo</td>
+            <td>$24 / user / mo</td>
+            <td class="col-omitt">$49 once</td>
+          </tr>
+          <tr>
+            <td>Original data leaves device</td>
+            <td class="bad">Yes</td>
+            <td class="bad">Yes</td>
+            <td class="col-omitt good">Never</td>
+          </tr>
+          <tr>
+            <td>Works offline (no network)</td>
+            <td class="bad">No</td>
+            <td class="bad">No</td>
+            <td class="col-omitt good">Yes</td>
+          </tr>
+          <tr>
+            <td>Works with Claude, Gemini, local AI</td>
+            <td class="bad">No</td>
+            <td>Some</td>
+            <td class="col-omitt good">Yes</td>
+          </tr>
+          <tr>
+            <td>You can verify what it does</td>
+            <td class="bad">Trust them</td>
+            <td class="bad">Trust them</td>
+            <td class="col-omitt good">Open detection engine</td>
+          </tr>
+          <tr>
+            <td>Time per document</td>
+            <td>0 sec (no protection)</td>
+            <td>30 sec</td>
+            <td class="col-omitt good">3 sec</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</section>
+
+<!-- =========== PRIVACY PROMISE =========== -->
+<section class="invert">
+  <div class="wrap promise">
+    <div class="eyebrow">Privacy you can verify</div>
+    <h2>We can't see your files.<br/>Here's how to check.</h2>
+    <p class="section-sub">Most "private" tools ask you to trust them. omitt is built so you don't have to.</p>
+
+    <div class="promise-stat">
+      <div>
+        <div class="stat-num">0 KB</div>
+        <div class="stat-label">leaves your Mac during detection</div>
+      </div>
+      <div>
+        <div class="stat-num">Offline</div>
+        <div class="stat-label">works with no internet at all</div>
+      </div>
+      <div>
+        <div class="stat-num">Open</div>
+        <div class="stat-label">detection engine published for audit</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- =========== PRICING =========== -->
+<section id="pricing">
+  <div class="wrap">
+    <div class="eyebrow">Pricing</div>
+    <h2>Pay once.<br/>Own it forever.</h2>
+    <p class="section-sub">A careful utility shouldn't be a subscription. Lifetime license. No upsells. No data resold.</p>
+
+    <div class="pricing">
+      <div class="price-card">
+        <div class="price-tier">Free</div>
+        <div class="price-amount"><sup>$</sup>0</div>
+        <div class="price-period">forever, no card</div>
+        <div class="price-desc">For trying it out and for occasional use.</div>
+        <ul class="price-features">
+          <li>All 8 detection categories visible in preview</li>
+          <li>3 clean exports per week</li>
+          <li>PDF and image support</li>
+          <li>Subtle watermark on exports</li>
+        </ul>
+        <a href="#access" class="price-cta">Get early access</a>
+      </div>
+
+      <div class="price-card featured">
+        <div class="price-tier">Pro</div>
+        <div class="price-amount"><sup>$</sup>49</div>
+        <div class="price-period">one-time, lifetime license</div>
+        <div class="price-desc">For professionals who use AI daily and can't afford a slip.</div>
+        <ul class="price-features">
+          <li>All 8 detection categories</li>
+          <li>Unlimited redactions</li>
+          <li>Custom rules and saved profiles</li>
+          <li>Browser extension</li>
+          <li>No watermark</li>
+          <li>1 year of feature updates included</li>
+          <li>Optional $24/yr after for ongoing updates</li>
+        </ul>
+        <a href="#access" class="price-cta">Get Pro free in beta</a>
+      </div>
+
+      <div class="price-card">
+        <div class="price-tier">Team</div>
+        <div class="price-amount"><sup>$</sup>10</div>
+        <div class="price-period">per user / month, billed annually at $96/yr (3-seat min)</div>
+        <div class="price-desc">For small firms with shared policies and a compliance angle.</div>
+        <ul class="price-features">
+          <li>Everything in Pro</li>
+          <li>Shared detection profiles</li>
+          <li>Local audit log</li>
+          <li>Centralized license keys</li>
+          <li>SSO (coming)</li>
+          <li>Always-updated, priority support</li>
+        </ul>
+        <a href="mailto:hello@omitt.app?subject=omitt%20for%20teams" class="price-cta">Talk to us</a>
+      </div>
+    </div>
+    <div class="pricing-note">Every early access user gets <strong>Pro free for life</strong> when we launch. No catch. Launching at <strong>$39 founding price</strong> for the first 30 days.</div>
+  </div>
+</section>
+
+<!-- =========== FAQ =========== -->
+<section class="invert" id="faq">
+  <div class="wrap-narrow">
+    <div class="eyebrow">Honest answers</div>
+    <h2 style="color: var(--ink);">Questions worth asking.</h2>
+    <p class="section-sub">The kind of details a careful person checks before installing software.</p>
+
+    <div class="faq">
+      <details class="faq-item">
+        <summary style="color: var(--ink);">Does omitt see my files?</summary>
+        <p style="color: var(--ink-soft);">No. Everything - file reading, detection, redaction - runs on your Mac. We can't see what we never receive. The app makes no outbound network calls during processing. You can watch this in Activity Monitor.</p>
+      </details>
+      <details class="faq-item">
+        <summary style="color: var(--ink);">What if it misses something sensitive?</summary>
+        <p style="color: var(--ink-soft);">You review every redaction before anything is copied. Side-by-side preview. Add manual redactions in one click. omitt suggests - you approve.</p>
+      </details>
+      <details class="faq-item">
+        <summary style="color: var(--ink);">Why not use ChatGPT Enterprise?</summary>
+        <p style="color: var(--ink-soft);">Two reasons. First: $60 per user per month adds up fast. Second: your data still leaves your device, just to a different server. ChatGPT Enterprise also doesn't work with Claude, Gemini, or local models. omitt cleans the data once - paste anywhere.</p>
+      </details>
+      <details class="faq-item">
+        <summary style="color: var(--ink);">What about my profession's confidentiality rules?</summary>
+        <p style="color: var(--ink-soft);">A federal court ruled in February 2026 that consumer AI conversations are not protected by attorney-client privilege. Some enterprise AI plans now offer BAA paths for healthcare, but the underlying issue remains: your data has left your device. omitt keeps the protected information on your machine - so the privilege/HIPAA/NDA question never arises in the first place.</p>
+      </details>
+      <details class="faq-item">
+        <summary style="color: var(--ink);">What happens after my first year of Pro?</summary>
+        <p style="color: var(--ink-soft);">Your app keeps working forever. You only pay $24/year if you want to keep receiving new detection categories, OS compatibility updates, and browser extension fixes. No subscription trap - just an honest renewal for ongoing development. This is the CleanShot X model and it works.</p>
+      </details>
+      <details class="faq-item">
+        <summary style="color: var(--ink);">Why one-time for individuals but subscription for teams?</summary>
+        <p style="color: var(--ink-soft);">Because solo professionals shouldn't pay forever for a careful utility - they should own it. Teams need ongoing administration, audit logs, and shared profiles, which is what a subscription pays for. Pay-as-you-go for what's a service. Pay-once for what's a tool.</p>
+      </details>
+      <details class="faq-item">
+        <summary style="color: var(--ink);">Which file types work?</summary>
+        <p style="color: var(--ink-soft);">PDFs, images (PNG, JPG, HEIC), screenshots. Word and Excel arrive in v1.1. Video frames in v1.2.</p>
+      </details>
+      <details class="faq-item">
+        <summary style="color: var(--ink);">Mac only?</summary>
+        <p style="color: var(--ink-soft);">macOS first. Windows beta in H2 2026. iOS and iPad after that. We're starting where users care most about local-first privacy.</p>
+      </details>
+      <details class="faq-item">
+        <summary style="color: var(--ink);">Is the detection engine open source?</summary>
+        <p style="color: var(--ink-soft);">Yes. The rules, regex sets and ML models that decide "this is a name" are published on GitHub. The app itself is proprietary. You can audit what we look for, even if you don't run the code.</p>
+      </details>
+      <details class="faq-item">
+        <summary style="color: var(--ink);">What if I find a false positive or negative?</summary>
+        <p style="color: var(--ink-soft);">You toggle it off in the review screen. omitt learns your preferences for next time on your machine - that pattern stays local too.</p>
+      </details>
+    </div>
+  </div>
+</section>
+
+<!-- =========== FINAL CTA =========== -->
+<section class="cta-final" id="access">
+  <div class="wrap-narrow">
+    <h2>One small habit.<br/>Before every paste.</h2>
+    <p class="lede">Private beta opens to 200 people. Early access gets Pro free for life - no card, no upsell, no follow-up emails except the invite.</p>
+
+    <form class="signup" onsubmit="return handleSignup(event, 'bottom')">
+      <input type="email" name="email" placeholder="your@work-email.com" required aria-label="Email" />
+      <button type="submit">Join the waitlist</button>
+    </form>
+    <div class="form-note">One email when the beta opens. Nothing else.</div>
+    <div class="form-success" id="success-bottom">Thanks. You're on the list. We'll email when the beta opens.</div>
+  </div>
+</section>
+
+<!-- Mobile sticky CTA - only shows after scrolling past hero -->
+<a href="#access" class="mobile-sticky-cta" aria-label="Get early access">Get early access →</a>
+
+<!-- =========== FOOTER =========== -->
+<footer>
+  <div class="wrap">
+    <img class="footer-logo" src="assets/svg/icon.svg" alt="" />
+    <div class="footer-text">© 2026 omitt. A careful utility, made by humans who like privacy.</div>
+    <div>
+      <a href="mailto:hello@omitt.app">Contact</a>
+      <a href="#">Privacy</a>
+      <a href="#">Twitter</a>
+    </div>
+  </div>
+</footer>
+
+<script>
+  // Lightweight client-side capture. Replace FORM_ENDPOINT with Formspree/Loops/ConvertKit URL when ready.
+  const FORM_ENDPOINT = ""; // e.g. "https://formspree.io/f/your-id"
+
+  // Toggle mobile sticky CTA after user scrolls past hero,
+  // hide near final CTA so it doesn't overlap with the form.
+  (function setupStickyCTA() {
+    const sticky = document.querySelector(".mobile-sticky-cta");
+    const hero = document.querySelector(".hero");
+    const finalCta = document.querySelector(".cta-final");
+    if (!sticky || !hero) return;
+    let ticking = false;
+    function onScroll() {
+      if (ticking) return;
+      ticking = true;
+      requestAnimationFrame(() => {
+        const heroBottom = hero.getBoundingClientRect().bottom;
+        const finalTop = finalCta ? finalCta.getBoundingClientRect().top : Infinity;
+        const viewportH = window.innerHeight;
+        const pastHero = heroBottom < 60;
+        const nearFinal = finalTop < viewportH * 0.9;
+        if (pastHero && !nearFinal) {
+          sticky.classList.add("show");
+        } else {
+          sticky.classList.remove("show");
+        }
+        ticking = false;
+      });
+    }
+    window.addEventListener("scroll", onScroll, { passive: true });
+    onScroll();
+  })();
+
+  async function handleSignup(e, where) {
+    e.preventDefault();
+    const form = e.target;
+    const email = form.email.value.trim();
+    if (!email) return false;
+
+    try {
+      const list = JSON.parse(localStorage.getItem("omitt_waitlist") || "[]");
+      if (!list.includes(email)) list.push(email);
+      localStorage.setItem("omitt_waitlist", JSON.stringify(list));
+    } catch (err) {}
+
+    if (FORM_ENDPOINT) {
+      try {
+        await fetch(FORM_ENDPOINT, {
+          method: "POST",
+          headers: { "Accept": "application/json", "Content-Type": "application/json" },
+          body: JSON.stringify({ email: email, source: where })
+        });
+      } catch (err) {
+        console.error("Signup error", err);
+      }
+    }
+
+    form.style.display = "none";
+    document.getElementById("success-" + where).classList.add("show");
+    return false;
+  }
+</script>
+
+</body>
+</html>
