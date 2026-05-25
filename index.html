@@ -1064,6 +1064,7 @@
 
   <form class="signup" onsubmit="return handleSignup(event, 'hero')">
     <input type="email" name="email" placeholder="your@work-email.com" required aria-label="Email" />
+    <input type="text" name="_gotcha" tabindex="-1" autocomplete="off" style="position:absolute;left:-9999px;width:1px;height:1px;opacity:0;" aria-hidden="true" />
     <button type="submit">Get early access</button>
   </form>
   <div class="form-note">On-device. No uploads. Early access users get Pro free for life.</div>
@@ -1416,6 +1417,7 @@
 
     <form class="signup" onsubmit="return handleSignup(event, 'bottom')">
       <input type="email" name="email" placeholder="your@work-email.com" required aria-label="Email" />
+      <input type="text" name="_gotcha" tabindex="-1" autocomplete="off" style="position:absolute;left:-9999px;width:1px;height:1px;opacity:0;" aria-hidden="true" />
       <button type="submit">Join the waitlist</button>
     </form>
     <div class="form-note">One email when the beta opens. Nothing else.</div>
@@ -1484,12 +1486,24 @@
       localStorage.setItem("omitt_waitlist", JSON.stringify(list));
     } catch (err) {}
 
+    // Honeypot: if a bot fills the hidden _gotcha field, silently fake success and exit
+    const gotcha = form.querySelector('input[name="_gotcha"]');
+    if (gotcha && gotcha.value) {
+      form.style.display = "none";
+      document.getElementById("success-" + where).classList.add("show");
+      return false;
+    }
+
     if (FORM_ENDPOINT) {
       try {
         await fetch(FORM_ENDPOINT, {
           method: "POST",
           headers: { "Accept": "application/json", "Content-Type": "application/json" },
-          body: JSON.stringify({ email: email, source: where })
+          body: JSON.stringify({
+            email: email,
+            source: where,
+            _subject: "New omitt waitlist signup (" + where + ")"
+          })
         });
       } catch (err) {
         console.error("Signup error", err);
