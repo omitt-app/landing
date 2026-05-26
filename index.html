@@ -156,9 +156,11 @@
   /* ============================
      HERO
      ============================ */
+  /* Hero mirrors .cta-final structure exactly: outer section padding + inner wrap-narrow.
+     This gives the same generous breathing room as the final CTA — visual consistency top to bottom. */
   .hero {
-    padding: 80px 0 80px;
     text-align: center;
+    padding: 80px 24px;
   }
   .hero-mark {
     width: 96px;
@@ -860,11 +862,11 @@
   /* --------- MOBILE (760px) --------- */
   @media (max-width: 760px) {
     /* UNIFIED column: all elements share same horizontal padding from edges.
-       This is the single source of truth for content width on mobile. */
+       Hero AND final CTA use same outer section padding + inner wrap-narrow inset. */
     .wrap, .wrap-narrow { padding: 0 32px; }
 
-    /* Hero: H1, lede, form, button — все спан повну content area, без max-width */
-    .hero { padding: 48px 0 56px; }
+    /* Hero: matches .cta-final - outer 20px + inner wrap-narrow 32px = 52px effective inset */
+    .hero { padding: 48px 20px 56px; }
     .hero-mark { width: 76px; height: 76px; margin-bottom: 28px; }
     .hero h1 {
       font-size: 32px;
@@ -971,8 +973,8 @@
 
   /* --------- SMALL MOBILE (480px - iPhone SE, small Androids) --------- */
   @media (max-width: 480px) {
-    /* Slightly tighter padding on the smallest phones so content has room,
-       but still the SAME for every element (text, form, cards, buttons). */
+    /* Same wrap padding as 760px — wrap-narrow handles content inset,
+       outer section padding handles edge breathing room. */
     .wrap, .wrap-narrow { padding: 0 28px; }
 
     /* Nav: compress */
@@ -981,8 +983,8 @@
     .logo-text { font-size: 19px; }
     nav .cta { padding: 9px 14px; font-size: 12px; }
 
-    /* Hero: tighter typography to fit, but FULL content width (no max-width) */
-    .hero { padding: 32px 0 48px; }
+    /* Hero: matches cta-final mobile pattern (18 + 28 = 46px effective inset) */
+    .hero { padding: 32px 18px 48px; }
     .hero-mark { width: 64px; height: 64px; margin-bottom: 24px; }
     .hero h1 {
       font-size: 26px;
@@ -1095,20 +1097,21 @@
 </nav>
 
 <!-- =========== HERO =========== -->
-<header class="hero wrap">
-  <img class="hero-mark" src="assets/svg/icon.svg" alt="" width="96" height="96" />
-  <h1>Hide sensitive data <br/>before you share.</h1>
-  <p class="lede">Drop a file. omitt redacts names, IDs, and faces right on your Mac. Paste the clean copy into ChatGPT, Claude, or anywhere. The original never moves.</p>
+<header class="hero">
+  <div class="wrap-narrow hero-inner">
+    <img class="hero-mark" src="assets/svg/icon.svg" alt="" width="96" height="96" />
+    <h1>Hide sensitive data <br/>before you share.</h1>
+    <p class="lede">Drop a file. omitt redacts names, IDs, and faces right on your Mac. Paste the clean copy into ChatGPT, Claude, or anywhere. The original never moves.</p>
 
-  <form class="signup" onsubmit="return handleSignup(event, 'hero')">
-    <input type="email" name="email" placeholder="your@work-email.com" required aria-label="Email" />
-    <input type="text" name="_gotcha" tabindex="-1" autocomplete="off" style="position:absolute;left:-9999px;width:1px;height:1px;opacity:0;" aria-hidden="true" />
-    <button type="submit">Get early access</button>
-  </form>
-  <div class="form-note">On-device. No uploads. Early access users get Pro free for life.</div>
-  <div class="form-success" id="success-hero">Thanks. You're on the list. We'll email when the beta opens.</div>
+    <form class="signup" onsubmit="return handleSignup(event, 'hero')">
+      <input type="email" name="email" placeholder="your@work-email.com" required aria-label="Email" />
+      <input type="text" name="_gotcha" tabindex="-1" autocomplete="off" style="position:absolute;left:-9999px;width:1px;height:1px;opacity:0;" aria-hidden="true" />
+      <button type="submit">Get early access</button>
+    </form>
+    <div class="form-note">On-device. No uploads. Early access users get Pro free for life.</div>
+    <div class="form-success" id="success-hero">Thanks. You're on the list. We'll email when the beta opens.</div>
 
-  <div class="demo">
+    <div class="demo">
     <div class="demo-mockup" aria-hidden="true">
       <svg viewBox="0 0 480 270" xmlns="http://www.w3.org/2000/svg">
         <!-- Window chrome -->
@@ -1138,6 +1141,7 @@
       </svg>
       <div class="demo-caption">A 30-second walkthrough is on the way.</div>
     </div>
+  </div>
   </div>
 </header>
 
