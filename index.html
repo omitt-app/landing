@@ -156,11 +156,12 @@
   /* ============================
      HERO
      ============================ */
-  /* Hero mirrors .cta-final structure exactly: outer section padding + inner wrap-narrow.
-     This gives the same generous breathing room as the final CTA — visual consistency top to bottom. */
+  /* Hero uses the SAME container (.wrap) as every other section.
+     Typographic hierarchy lives in max-width on .lede and form — NOT in the container.
+     This is the Apple/Stripe/Linear pattern: one column width, hierarchy via type. */
   .hero {
     text-align: center;
-    padding: 80px 24px;
+    padding: 80px 0;
   }
   .hero-mark {
     width: 96px;
@@ -181,7 +182,7 @@
   .hero .lede {
     font-size: clamp(18px, 1.8vw, 22px);
     color: var(--cream-soft);
-    max-width: 640px;
+    max-width: 620px;  /* Same as .section-sub - unified reading column */
     margin: 0 auto 40px;
     font-weight: 400;
   }
@@ -757,11 +758,11 @@
   }
 
   /* ============================
-     FINAL CTA
+     FINAL CTA - uses .wrap like all other sections for visual consistency
      ============================ */
   .cta-final {
     text-align: center;
-    padding: 120px 24px;
+    padding: 120px 0;
   }
   .cta-final h2 { color: var(--cream); }
   .cta-final .lede {
@@ -861,12 +862,12 @@
 
   /* --------- MOBILE (760px) --------- */
   @media (max-width: 760px) {
-    /* UNIFIED column: all elements share same horizontal padding from edges.
-       Hero AND final CTA use same outer section padding + inner wrap-narrow inset. */
-    .wrap, .wrap-narrow { padding: 0 32px; }
+    /* SINGLE source of truth for content column on mobile.
+       Every section, hero, final CTA — they all share this padding. */
+    .wrap, .wrap-narrow { padding: 0 28px; }
 
-    /* Hero: matches .cta-final - outer 20px + inner wrap-narrow 32px = 52px effective inset */
-    .hero { padding: 48px 20px 56px; }
+    /* Hero uses .wrap directly — no extra horizontal padding */
+    .hero { padding: 48px 0 56px; }
     .hero-mark { width: 76px; height: 76px; margin-bottom: 28px; }
     .hero h1 {
       font-size: 32px;
@@ -963,8 +964,8 @@
     .faq details.faq-item summary { font-size: 17px; padding: 20px 0; }
     .faq details.faq-item p { font-size: 15px; padding-bottom: 20px; }
 
-    /* CTA final */
-    .cta-final { padding: 80px 20px; }
+    /* CTA final - uses .wrap padding (unified with all sections) */
+    .cta-final { padding: 80px 0; }
     .cta-final .lede { font-size: 17px; margin-bottom: 32px; }
 
     /* Footer */
@@ -973,9 +974,8 @@
 
   /* --------- SMALL MOBILE (480px - iPhone SE, small Androids) --------- */
   @media (max-width: 480px) {
-    /* Same wrap padding as 760px — wrap-narrow handles content inset,
-       outer section padding handles edge breathing room. */
-    .wrap, .wrap-narrow { padding: 0 28px; }
+    /* Same column padding as the rest of the page — no special cases */
+    .wrap, .wrap-narrow { padding: 0 24px; }
 
     /* Nav: compress */
     nav { padding: 14px 0; }
@@ -983,8 +983,8 @@
     .logo-text { font-size: 19px; }
     nav .cta { padding: 9px 14px; font-size: 12px; }
 
-    /* Hero: matches cta-final mobile pattern (18 + 28 = 46px effective inset) */
-    .hero { padding: 32px 18px 48px; }
+    /* Hero uses .wrap padding (unified) */
+    .hero { padding: 32px 0 48px; }
     .hero-mark { width: 64px; height: 64px; margin-bottom: 24px; }
     .hero h1 {
       font-size: 26px;
@@ -1055,8 +1055,8 @@
     .faq details.faq-item summary::after { font-size: 20px; }
     .faq details.faq-item p { font-size: 14px; padding-bottom: 18px; }
 
-    /* CTA final */
-    .cta-final { padding: 64px 18px; }
+    /* CTA final - uses .wrap padding (unified) */
+    .cta-final { padding: 64px 0; }
     .cta-final .lede { font-size: 16px; }
 
     /* Footer */
@@ -1098,7 +1098,7 @@
 
 <!-- =========== HERO =========== -->
 <header class="hero">
-  <div class="wrap-narrow hero-inner">
+  <div class="wrap">
     <img class="hero-mark" src="assets/svg/icon.svg" alt="" width="96" height="96" />
     <h1>Hide sensitive data <br/>before you share.</h1>
     <p class="lede">Drop a file. omitt redacts names, IDs, and faces right on your Mac. Paste the clean copy into ChatGPT, Claude, or anywhere. The original never moves.</p>
@@ -1424,7 +1424,7 @@
 
 <!-- =========== FAQ =========== -->
 <section class="invert" id="faq">
-  <div class="wrap-narrow">
+  <div class="wrap">
     <div class="eyebrow">Honest answers</div>
     <h2 style="color: var(--ink);">Questions worth asking.</h2>
     <p class="section-sub">The kind of details a careful person checks before installing software.</p>
@@ -1476,7 +1476,7 @@
 
 <!-- =========== FINAL CTA =========== -->
 <section class="cta-final" id="access">
-  <div class="wrap-narrow">
+  <div class="wrap">
     <h2>One small habit.<br/>Before every paste.</h2>
     <p class="lede">Private beta opens to 200 people. Early access gets Pro free for life - no card, no upsell, no follow-up emails except the invite.</p>
 
