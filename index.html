@@ -607,7 +607,8 @@
     content: "Recommended";
     position: absolute;
     top: -12px;
-    left: 24px;
+    left: 50%;
+    transform: translateX(-50%);
     background: var(--cream);
     color: var(--ink);
     font-family: var(--font-body);
@@ -858,14 +859,27 @@
 
   /* --------- MOBILE (760px) --------- */
   @media (max-width: 760px) {
-    .wrap, .wrap-narrow { padding: 0 28px; }
+    .wrap, .wrap-narrow { padding: 0 32px; }
 
     /* Hero: remove forced <br/> on mobile - let text wrap naturally */
     .hero { padding: 48px 0 56px; }
     .hero-mark { width: 76px; height: 76px; margin-bottom: 28px; }
-    .hero h1 { font-size: 36px; line-height: 1.08; letter-spacing: -0.022em; }
+    .hero h1 {
+      font-size: 32px;
+      line-height: 1.12;
+      letter-spacing: -0.02em;
+      max-width: 18ch;
+      margin-left: auto;
+      margin-right: auto;
+    }
     .hero h1 br { display: none; }
-    .hero .lede { font-size: 17px; margin-bottom: 32px; }
+    .hero .lede {
+      font-size: 16px;
+      margin-bottom: 32px;
+      max-width: 36ch;
+      margin-left: auto;
+      margin-right: auto;
+    }
 
     /* Demo mockup mobile */
     .demo { padding: 18px; margin-top: 48px; }
@@ -957,7 +971,7 @@
 
   /* --------- SMALL MOBILE (480px - iPhone SE, small Androids) --------- */
   @media (max-width: 480px) {
-    .wrap, .wrap-narrow { padding: 0 24px; }
+    .wrap, .wrap-narrow { padding: 0 28px; }
 
     /* Nav: compress */
     nav { padding: 14px 0; }
@@ -965,11 +979,16 @@
     .logo-text { font-size: 19px; }
     nav .cta { padding: 9px 14px; font-size: 12px; }
 
-    /* Hero: tighter */
+    /* Hero: tighter typography for narrow screens */
     .hero { padding: 32px 0 48px; }
     .hero-mark { width: 64px; height: 64px; margin-bottom: 24px; }
-    .hero h1 { font-size: 28px; line-height: 1.12; letter-spacing: -0.015em; }
-    .hero .lede { font-size: 15px; margin-bottom: 28px; line-height: 1.55; }
+    .hero h1 {
+      font-size: 26px;
+      line-height: 1.15;
+      letter-spacing: -0.012em;
+      max-width: 14ch;
+    }
+    .hero .lede { font-size: 15px; margin-bottom: 28px; line-height: 1.55; max-width: 32ch; }
     .form-note { font-size: 12px; }
 
     /* Demo mockup compact */
@@ -1020,7 +1039,6 @@
     .price-card.featured::before {
       font-size: 10px;
       padding: 4px 10px;
-      left: 22px;
     }
     .price-amount { font-size: 40px; }
     .price-amount sup { font-size: 19px; }
