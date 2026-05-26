@@ -157,7 +157,7 @@
      HERO
      ============================ */
   /* Hero uses the SAME container (.wrap) as every other section.
-     Typographic hierarchy lives in max-width on .lede and form — NOT in the container.
+     Typographic hierarchy lives in max-width on .lede and form -NOT in the container.
      This is the Apple/Stripe/Linear pattern: one column width, hierarchy via type. */
   .hero {
     text-align: center;
@@ -260,6 +260,34 @@
     text-align: center;
   }
   .form-success.show { display: block; }
+
+  /* On-brand inline form error - replaces default browser validation bubble */
+  .form-error {
+    display: none;
+    margin: 12px auto 0;
+    max-width: 480px;
+    padding: 12px 16px;
+    background: rgba(249, 242, 237, 0.06);
+    border: 1px solid var(--cream-line);
+    border-left: 3px solid var(--cream);
+    border-radius: var(--radius);
+    font-family: var(--font-body);
+    font-size: 14px;
+    font-weight: 500;
+    color: var(--cream);
+    text-align: left;
+  }
+  .form-error.show { display: block; }
+  section.invert .form-error {
+    background: rgba(13, 13, 12, 0.04);
+    border-color: var(--ink-line);
+    border-left-color: var(--ink);
+    color: var(--ink);
+  }
+  form.signup input[type="email"].is-invalid {
+    border-color: var(--cream);
+    background: rgba(249, 242, 237, 0.12);
+  }
   section.invert .form-success {
     background: rgba(13, 13, 12, 0.06);
     border-color: var(--ink-line);
@@ -564,6 +592,15 @@
   }
   table.compare td.good { color: var(--cream); font-weight: 600; }
   table.compare td.bad { color: var(--cream-mute); }
+  table.compare .th-note {
+    display: block;
+    font-size: 11px;
+    font-weight: 500;
+    letter-spacing: 0.02em;
+    text-transform: none;
+    color: var(--cream-mute);
+    margin-top: 2px;
+  }
 
   /* ============================
      PRIVACY PROMISE
@@ -863,10 +900,10 @@
   /* --------- MOBILE (760px) --------- */
   @media (max-width: 760px) {
     /* SINGLE source of truth for content column on mobile.
-       Every section, hero, final CTA — they all share this padding. */
+       Every section, hero, final CTA -they all share this padding. */
     .wrap, .wrap-narrow { padding: 0 28px; }
 
-    /* Hero uses .wrap directly — no extra horizontal padding */
+    /* Hero uses .wrap directly -no extra horizontal padding */
     .hero { padding: 48px 0 56px; }
     .hero-mark { width: 76px; height: 76px; margin-bottom: 28px; }
     .hero h1 {
@@ -877,7 +914,7 @@
     .hero h1 br { display: none; }
     .hero .lede { font-size: 16px; margin-bottom: 32px; }
 
-    /* Form & button — stack vertically, full content width (matches cards/text) */
+    /* Form & button -stack vertically, full content width (matches cards/text) */
     form.signup {
       flex-direction: column;
       max-width: 100%;
@@ -974,7 +1011,7 @@
 
   /* --------- SMALL MOBILE (480px - iPhone SE, small Androids) --------- */
   @media (max-width: 480px) {
-    /* Same column padding as the rest of the page — no special cases */
+    /* Same column padding as the rest of the page -no special cases */
     .wrap, .wrap-narrow { padding: 0 24px; }
 
     /* Nav: compress */
@@ -1103,11 +1140,12 @@
     <h1>Hide sensitive data <br/>before you share.</h1>
     <p class="lede">Drop a file. omitt redacts names, IDs, and faces right on your Mac. Paste the clean copy into ChatGPT, Claude, or anywhere. The original never moves.</p>
 
-    <form class="signup" onsubmit="return handleSignup(event, 'hero')">
-      <input type="email" name="email" placeholder="your@work-email.com" required aria-label="Email" />
+    <form class="signup" novalidate onsubmit="return handleSignup(event, 'hero')">
+      <input type="email" name="email" placeholder="your@work-email.com" aria-label="Email" />
       <input type="text" name="_gotcha" tabindex="-1" autocomplete="off" style="position:absolute;left:-9999px;width:1px;height:1px;opacity:0;" aria-hidden="true" />
       <button type="submit">Get early access</button>
     </form>
+    <div class="form-error" id="error-hero" role="alert" aria-live="polite"></div>
     <div class="form-note">On-device. No uploads. Early access users get Pro free for life.</div>
     <div class="form-success" id="success-hero">Thanks. You're on the list. We'll email when the beta opens.</div>
 
@@ -1284,7 +1322,7 @@
   <div class="wrap">
     <div class="eyebrow">Why not just&hellip;</div>
     <h2>The other ways<br/>don't do this.</h2>
-    <p class="section-sub">There are four paths. Three of them keep your data moving. One keeps it home.</p>
+    <p class="section-sub">Most options keep your file moving through someone else's servers. omitt keeps it on your Mac.</p>
 
     <div class="compare-wrap">
       <table class="compare">
@@ -1292,46 +1330,46 @@
           <tr>
             <th></th>
             <th>ChatGPT Enterprise</th>
-            <th>Cloud redaction tools</th>
+            <th>Cloud redaction tools<br/><span class="th-note">e.g. Redactable</span></th>
             <th class="col-omitt">omitt</th>
           </tr>
         </thead>
         <tbody>
           <tr>
             <td>Cost</td>
-            <td>$60 / user / mo</td>
-            <td>$24 / user / mo</td>
-            <td class="col-omitt">$49 once</td>
+            <td>~$60 / user / month</td>
+            <td>~$24 / user / month</td>
+            <td class="col-omitt good">$49 once</td>
           </tr>
           <tr>
-            <td>Original data leaves device</td>
-            <td class="bad">Yes</td>
-            <td class="bad">Yes</td>
-            <td class="col-omitt good">Never</td>
+            <td>Where your file goes</td>
+            <td class="bad">OpenAI servers</td>
+            <td class="bad">Vendor's cloud</td>
+            <td class="col-omitt good">Stays on your Mac</td>
           </tr>
           <tr>
-            <td>Works offline (no network)</td>
+            <td>Works offline</td>
             <td class="bad">No</td>
             <td class="bad">No</td>
             <td class="col-omitt good">Yes</td>
           </tr>
           <tr>
-            <td>Works with Claude, Gemini, local AI</td>
-            <td class="bad">No</td>
-            <td>Some</td>
-            <td class="col-omitt good">Yes</td>
+            <td>Locked to one AI vendor</td>
+            <td class="bad">Yes (OpenAI only)</td>
+            <td>No</td>
+            <td class="col-omitt good">No - paste anywhere</td>
           </tr>
           <tr>
             <td>You can verify what it does</td>
-            <td class="bad">Trust them</td>
-            <td class="bad">Trust them</td>
+            <td class="bad">Trust their policies</td>
+            <td class="bad">Trust their policies</td>
             <td class="col-omitt good">Open detection engine</td>
           </tr>
           <tr>
             <td>Time per document</td>
-            <td>0 sec (no protection)</td>
-            <td>30 sec</td>
-            <td class="col-omitt good">3 sec</td>
+            <td>Instant (no redaction layer)</td>
+            <td>~30 sec (upload, process)</td>
+            <td class="col-omitt good">~3 sec</td>
           </tr>
         </tbody>
       </table>
@@ -1440,7 +1478,7 @@
       </details>
       <details class="faq-item">
         <summary style="color: var(--ink);">Why not use ChatGPT Enterprise?</summary>
-        <p style="color: var(--ink-soft);">Two reasons. First: $60 per user per month adds up fast. Second: your data still leaves your device, just to a different server. ChatGPT Enterprise also doesn't work with Claude, Gemini, or local models. omitt cleans the data once - paste anywhere.</p>
+        <p style="color: var(--ink-soft);">Two reasons. First: roughly $60 per user per month adds up fast. Second: your file still leaves your device - it just goes to OpenAI's servers instead of someone else's. ChatGPT Enterprise also locks you to OpenAI, while omitt cleans the file once and lets you paste into Claude, Gemini, or any AI you choose.</p>
       </details>
       <details class="faq-item">
         <summary style="color: var(--ink);">What about my profession's confidentiality rules?</summary>
@@ -1456,11 +1494,11 @@
       </details>
       <details class="faq-item">
         <summary style="color: var(--ink);">Which file types work?</summary>
-        <p style="color: var(--ink-soft);">PDFs, images (PNG, JPG, HEIC), screenshots. Word and Excel arrive in v1.1. Video frames in v1.2.</p>
+        <p style="color: var(--ink-soft);">At launch: PDFs, images (PNG, JPG, HEIC), and screenshots. Word and Excel support is on the roadmap. Video frames after that. Waitlist members get to vote on what ships first.</p>
       </details>
       <details class="faq-item">
         <summary style="color: var(--ink);">Mac only?</summary>
-        <p style="color: var(--ink-soft);">macOS first. Windows beta in H2 2026. iOS and iPad after that. We're starting where users care most about local-first privacy.</p>
+        <p style="color: var(--ink-soft);">macOS first. Windows and iPad are on the roadmap - we'll let waitlist members know when each is ready. We're starting where users care most about local-first privacy.</p>
       </details>
       <details class="faq-item">
         <summary style="color: var(--ink);">Is the detection engine open source?</summary>
@@ -1480,11 +1518,12 @@
     <h2>One small habit.<br/>Before every paste.</h2>
     <p class="lede">Private beta opens to 200 people. Early access gets Pro free for life - no card, no upsell, no follow-up emails except the invite.</p>
 
-    <form class="signup" onsubmit="return handleSignup(event, 'bottom')">
-      <input type="email" name="email" placeholder="your@work-email.com" required aria-label="Email" />
+    <form class="signup" novalidate onsubmit="return handleSignup(event, 'bottom')">
+      <input type="email" name="email" placeholder="your@work-email.com" aria-label="Email" />
       <input type="text" name="_gotcha" tabindex="-1" autocomplete="off" style="position:absolute;left:-9999px;width:1px;height:1px;opacity:0;" aria-hidden="true" />
       <button type="submit">Join the waitlist</button>
     </form>
+    <div class="form-error" id="error-bottom" role="alert" aria-live="polite"></div>
     <div class="form-note">One email when the beta opens. Nothing else.</div>
     <div class="form-success" id="success-bottom">Thanks. You're on the list. We'll email when the beta opens.</div>
   </div>
@@ -1537,11 +1576,63 @@
     onScroll();
   })();
 
+  // Simple, defensible email regex - matches RFC-style addresses
+  const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
+  function showFormError(where, message) {
+    const errorEl = document.getElementById("error-" + where);
+    const form = document.querySelector("form.signup[onsubmit*=\"'" + where + "'\"]");
+    if (errorEl) {
+      errorEl.textContent = message;
+      errorEl.classList.add("show");
+    }
+    if (form) {
+      const input = form.querySelector('input[type="email"]');
+      if (input) {
+        input.classList.add("is-invalid");
+        input.focus();
+      }
+    }
+  }
+
+  function clearFormError(where) {
+    const errorEl = document.getElementById("error-" + where);
+    const form = document.querySelector("form.signup[onsubmit*=\"'" + where + "'\"]");
+    if (errorEl) {
+      errorEl.classList.remove("show");
+      errorEl.textContent = "";
+    }
+    if (form) {
+      const input = form.querySelector('input[type="email"]');
+      if (input) input.classList.remove("is-invalid");
+    }
+  }
+
+  // Clear error as soon as user starts typing
+  document.querySelectorAll('form.signup input[type="email"]').forEach((input) => {
+    input.addEventListener("input", () => {
+      const form = input.closest("form");
+      const onsubmit = form.getAttribute("onsubmit") || "";
+      const match = onsubmit.match(/'(\w+)'/);
+      if (match) clearFormError(match[1]);
+    });
+  });
+
   async function handleSignup(e, where) {
     e.preventDefault();
     const form = e.target;
     const email = form.email.value.trim();
-    if (!email) return false;
+
+    // Custom on-brand validation
+    if (!email) {
+      showFormError(where, "Please add your email so we can let you in when the beta opens.");
+      return false;
+    }
+    if (!EMAIL_RE.test(email)) {
+      showFormError(where, "That email looks a bit off. Mind double-checking it?");
+      return false;
+    }
+    clearFormError(where);
 
     try {
       const list = JSON.parse(localStorage.getItem("omitt_waitlist") || "[]");
