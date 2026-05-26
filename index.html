@@ -859,26 +859,36 @@
 
   /* --------- MOBILE (760px) --------- */
   @media (max-width: 760px) {
+    /* UNIFIED column: all elements share same horizontal padding from edges.
+       This is the single source of truth for content width on mobile. */
     .wrap, .wrap-narrow { padding: 0 32px; }
 
-    /* Hero: remove forced <br/> on mobile - let text wrap naturally */
+    /* Hero: H1, lede, form, button — все спан повну content area, без max-width */
     .hero { padding: 48px 0 56px; }
     .hero-mark { width: 76px; height: 76px; margin-bottom: 28px; }
     .hero h1 {
       font-size: 32px;
       line-height: 1.12;
       letter-spacing: -0.02em;
-      max-width: 18ch;
-      margin-left: auto;
-      margin-right: auto;
     }
     .hero h1 br { display: none; }
-    .hero .lede {
-      font-size: 16px;
-      margin-bottom: 32px;
-      max-width: 36ch;
-      margin-left: auto;
-      margin-right: auto;
+    .hero .lede { font-size: 16px; margin-bottom: 32px; }
+
+    /* Form & button — stack vertically, full content width (matches cards/text) */
+    form.signup {
+      flex-direction: column;
+      max-width: 100%;
+      gap: 10px;
+    }
+    form.signup input[type="email"] {
+      min-width: 0;
+      width: 100%;
+      padding: 14px 16px;
+      font-size: 16px; /* prevents iOS auto-zoom on focus */
+    }
+    form.signup button {
+      width: 100%;
+      padding: 14px 20px;
     }
 
     /* Demo mockup mobile */
@@ -887,16 +897,6 @@
 
     /* Nav CTA touch-friendly */
     nav .cta { padding: 10px 18px; font-size: 13px; margin-right: 0; }
-
-    /* Form: stack vertically on mobile to prevent overflow */
-    form.signup { flex-direction: column; max-width: 380px; }
-    form.signup input[type="email"] {
-      min-width: 0;
-      width: 100%;
-      padding: 14px 16px;
-      font-size: 16px; /* prevents iOS zoom on focus */
-    }
-    form.signup button { width: 100%; padding: 14px 20px; }
 
     /* Sections */
     section { padding: 72px 0; }
@@ -971,6 +971,8 @@
 
   /* --------- SMALL MOBILE (480px - iPhone SE, small Androids) --------- */
   @media (max-width: 480px) {
+    /* Slightly tighter padding on the smallest phones so content has room,
+       but still the SAME for every element (text, form, cards, buttons). */
     .wrap, .wrap-narrow { padding: 0 28px; }
 
     /* Nav: compress */
@@ -979,16 +981,15 @@
     .logo-text { font-size: 19px; }
     nav .cta { padding: 9px 14px; font-size: 12px; }
 
-    /* Hero: tighter typography for narrow screens */
+    /* Hero: tighter typography to fit, but FULL content width (no max-width) */
     .hero { padding: 32px 0 48px; }
     .hero-mark { width: 64px; height: 64px; margin-bottom: 24px; }
     .hero h1 {
       font-size: 26px;
       line-height: 1.15;
       letter-spacing: -0.012em;
-      max-width: 14ch;
     }
-    .hero .lede { font-size: 15px; margin-bottom: 28px; line-height: 1.55; max-width: 32ch; }
+    .hero .lede { font-size: 15px; margin-bottom: 28px; line-height: 1.55; }
     .form-note { font-size: 12px; }
 
     /* Demo mockup compact */
