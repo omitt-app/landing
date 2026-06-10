@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Page not found - omitt</title>
+<meta name="robots" content="noindex" />
+
+<meta name="theme-color" content="#0D0D0C">
+<link rel="icon" type="image/svg+xml" href="/assets/svg/favicon.svg">
+<link rel="icon" type="image/png" sizes="32x32" href="/assets/png/icon-32.png">
+<link rel="apple-touch-icon" sizes="180x180" href="/assets/png/apple-touch-icon-180.png">
+
+<link rel="stylesheet" href="/assets/fonts/fonts.css">
+
+<style>
+  :root {
+    --ink:        #0D0D0C;
+    --cream:      #F9F2ED;
+    --cream-soft: rgba(249, 242, 237, 0.70);
+    --cream-mute: rgba(249, 242, 237, 0.55);
+    --cream-line: rgba(249, 242, 237, 0.10);
+    --radius:     14px;
+    --radius-pill: 999px;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font-family: var(--font-body);
+    background: var(--ink);
+    color: var(--cream);
+    line-height: 1.55;
+    -webkit-font-smoothing: antialiased;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    padding: 24px;
+  }
+  a:focus-visible { outline: 2px solid var(--cream); outline-offset: 3px; border-radius: 4px; }
+  .mark { width: 72px; height: 72px; margin-bottom: 32px; }
+  .code {
+    font-family: var(--font-body);
+    font-size: 13px;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--cream-mute);
+    margin-bottom: 18px;
+  }
+  h1 {
+    font-family: var(--font-display);
+    font-size: clamp(32px, 5vw, 52px);
+    font-weight: 800;
+    letter-spacing: -0.025em;
+    line-height: 1.05;
+    margin-bottom: 16px;
+  }
+  p {
+    font-size: 17px;
+    color: var(--cream-soft);
+    max-width: 420px;
+    margin: 0 auto 36px;
+  }
+  .home {
+    display: inline-block;
+    background: var(--cream);
+    color: var(--ink);
+    padding: 13px 26px;
+    border-radius: var(--radius-pill);
+    text-decoration: none;
+    font-size: 15px;
+    font-weight: 700;
+    letter-spacing: -0.01em;
+    transition: opacity .15s, transform .1s;
+  }
+  .home:hover { opacity: .9; }
+  .home:active { transform: scale(.98); }
+</style>
+</head>
+<body>
+  <img class="mark" src="/assets/svg/icon.svg" alt="" />
+  <div class="code">404</div>
+  <h1>This page doesn't exist.</h1>
+  <p>Maybe it was redacted. More likely the link is just wrong.</p>
+  <a class="home" href="/">Back to omitt</a>
+</body>
+</html>

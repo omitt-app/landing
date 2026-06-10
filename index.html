@@ -3,34 +3,39 @@
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-<title>omitt - Hide sensitive data before you share with AI</title>
+<title>omitt - Hide sensitive data before you share</title>
 <meta name="description" content="Drop a file. omitt redacts names, IDs, and faces on your Mac before you paste into ChatGPT, Claude, or anywhere. The original never moves." />
 
 <!-- Theme color & icons -->
 <meta name="theme-color" content="#0D0D0C">
-<link rel="icon" type="image/svg+xml" href="assets/svg/favicon.svg">
-<link rel="icon" type="image/png" sizes="32x32" href="assets/png/icon-32.png">
-<link rel="icon" type="image/png" sizes="16x16" href="assets/png/icon-16.png">
-<link rel="apple-touch-icon" sizes="180x180" href="assets/png/apple-touch-icon-180.png">
-<link rel="manifest" href="site.webmanifest">
+<link rel="icon" type="image/svg+xml" href="/assets/svg/favicon.svg">
+<link rel="icon" type="image/png" sizes="32x32" href="/assets/png/icon-32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="/assets/png/icon-16.png">
+<link rel="apple-touch-icon" sizes="180x180" href="/assets/png/apple-touch-icon-180.png">
+<link rel="manifest" href="/site.webmanifest">
+<link rel="canonical" href="https://omitt.app/">
 
 <!-- Social share -->
 <meta property="og:title" content="omitt - Hide sensitive data before you share" />
 <meta property="og:description" content="Drop any file. omitt hides what shouldn't leave your Mac before you paste into AI. The original never moves." />
 <meta property="og:type" content="website" />
-<meta property="og:url" content="https://omitt.app" />
-<meta property="og:image" content="assets/png/og-image.png">
+<meta property="og:url" content="https://omitt.app/" />
+<meta property="og:site_name" content="omitt" />
+<meta property="og:image" content="https://omitt.app/assets/png/og-image.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
 <meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="https://omitt.app/assets/png/og-image.png">
 
 <!-- Font (self-hosted Nunito variable) -->
-<link rel="stylesheet" href="assets/fonts/fonts.css">
+<link rel="stylesheet" href="/assets/fonts/fonts.css">
 
 <style>
   :root {
     --ink:        #0D0D0C;
     --cream:      #F9F2ED;
     --ink-soft:   rgba(13, 13, 12, 0.70);
-    --ink-mute:   rgba(13, 13, 12, 0.55);
+    --ink-mute:   rgba(13, 13, 12, 0.62); /* 0.62 keeps small text AA-readable on cream */
     --cream-soft: rgba(249, 242, 237, 0.70);
     --cream-mute: rgba(249, 242, 237, 0.55);
     --cream-line: rgba(249, 242, 237, 0.10);
@@ -41,7 +46,21 @@
   }
 
   * { box-sizing: border-box; margin: 0; padding: 0; }
-  html { scroll-behavior: smooth; }
+  @media (prefers-reduced-motion: no-preference) {
+    html { scroll-behavior: smooth; }
+  }
+
+  /* Visible keyboard focus - matches the two-color system */
+  a:focus-visible, button:focus-visible, summary:focus-visible {
+    outline: 2px solid var(--cream);
+    outline-offset: 3px;
+    border-radius: 4px;
+  }
+  section.invert a:focus-visible,
+  section.invert button:focus-visible,
+  section.invert summary:focus-visible {
+    outline-color: var(--ink);
+  }
 
   body {
     font-family: var(--font-body);
@@ -319,6 +338,40 @@
     font-weight: 500;
     color: var(--cream-mute);
     letter-spacing: 0.01em;
+  }
+
+  /* Demo animation: a scan band sweeps the document, redaction bars
+     appear as it passes them. Pure CSS, 6s loop with a quiet pause. */
+  .demo-scanline {
+    animation: demo-scan 6s ease-in-out infinite;
+  }
+  .demo-bar {
+    transform-box: fill-box;
+    transform-origin: left center;
+  }
+  .demo-bar-1 { animation: demo-redact-1 6s ease-out infinite; }
+  .demo-bar-2 { animation: demo-redact-2 6s ease-out infinite; }
+  @keyframes demo-scan {
+    0%, 8%      { transform: translateY(0);     opacity: 0; }
+    14%         { transform: translateY(24px);  opacity: 1; }
+    52%         { transform: translateY(170px); opacity: 1; }
+    58%, 100%   { transform: translateY(180px); opacity: 0; }
+  }
+  @keyframes demo-redact-1 {
+    0%, 26%     { transform: scaleX(0); opacity: 1; }
+    34%         { transform: scaleX(1); opacity: 1; }
+    92%         { transform: scaleX(1); opacity: 1; }
+    97%, 100%   { transform: scaleX(1); opacity: 0; }
+  }
+  @keyframes demo-redact-2 {
+    0%, 38%     { transform: scaleX(0); opacity: 1; }
+    46%         { transform: scaleX(1); opacity: 1; }
+    92%         { transform: scaleX(1); opacity: 1; }
+    97%, 100%   { transform: scaleX(1); opacity: 0; }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .demo-scanline { display: none; }
+    .demo-bar-1, .demo-bar-2 { animation: none; }
   }
 
   /* ============================
@@ -824,15 +877,18 @@
       font-weight: 700;
       font-size: 15px;
       letter-spacing: -0.01em;
+      white-space: nowrap; /* fixed + left:50% caps available width at 50vw - without this the label wraps */
       box-shadow: 0 10px 28px rgba(0,0,0,0.35);
       z-index: 80;
       opacity: 0;
       pointer-events: none;
-      transition: opacity .25s ease, transform .25s ease;
+      visibility: hidden; /* keeps the hidden CTA out of the keyboard tab order */
+      transition: opacity .25s ease, transform .25s ease, visibility .25s;
     }
     .mobile-sticky-cta.show {
       opacity: 1;
       pointer-events: auto;
+      visibility: visible;
     }
     .mobile-sticky-cta:active { transform: translateX(-50%) scale(.97); }
   }
@@ -1112,7 +1168,7 @@
 <nav>
   <div class="wrap row">
     <a href="#" class="logo" aria-label="omitt home">
-      <img class="logo-icon" src="assets/svg/icon.svg" alt="" />
+      <img class="logo-icon" src="/assets/svg/icon.svg" alt="" />
       <span class="logo-text">omitt</span>
     </a>
     <div class="nav-links">
@@ -1124,21 +1180,23 @@
   </div>
 </nav>
 
+<main>
+
 <!-- =========== HERO =========== -->
 <header class="hero">
   <div class="wrap">
-    <img class="hero-mark" src="assets/svg/icon.svg" alt="" width="96" height="96" />
+    <img class="hero-mark" src="/assets/svg/icon.svg" alt="" width="96" height="96" />
     <h1>Hide sensitive data <br/>before you share.</h1>
     <p class="lede">Drop a file. omitt redacts names, IDs, and faces right on your Mac. Paste the clean copy into ChatGPT, Claude, or anywhere. The original never moves.</p>
 
     <form class="signup" novalidate onsubmit="return handleSignup(event, 'hero')">
-      <input type="email" name="email" placeholder="your@work-email.com" aria-label="Email" />
+      <input type="email" name="email" placeholder="your@work-email.com" aria-label="Email" autocomplete="email" />
       <input type="text" name="_gotcha" tabindex="-1" autocomplete="off" style="position:absolute;left:-9999px;width:1px;height:1px;opacity:0;" aria-hidden="true" />
       <button type="submit">Get early access</button>
     </form>
     <div class="form-error" id="error-hero" role="alert" aria-live="polite"></div>
-    <div class="form-note">On-device. No uploads. Early access users get Pro free for life.</div>
-    <div class="form-success" id="success-hero">Thanks. You're on the list. We'll email when the beta opens.</div>
+    <div class="form-note">On-device. No uploads. First 200 on the list get Pro free for life.</div>
+    <div class="form-success" id="success-hero" role="status">Thanks. You're on the list. We'll email when the beta opens.</div>
 
     <div class="demo">
     <div class="demo-mockup" aria-hidden="true">
@@ -1156,17 +1214,19 @@
         <rect x="20" y="104" width="340" height="6" rx="3" fill="rgba(249, 242, 237, 0.14)"/>
         <!-- Line with redaction bar (the magic moment) -->
         <rect x="20" y="122" width="160" height="6" rx="3" fill="rgba(249, 242, 237, 0.14)"/>
-        <rect x="188" y="118" width="118" height="14" rx="2" fill="rgba(249, 242, 237, 0.78)"/>
+        <rect class="demo-bar demo-bar-1" x="188" y="118" width="118" height="14" rx="2" fill="rgba(249, 242, 237, 0.78)"/>
         <rect x="314" y="122" width="86" height="6" rx="3" fill="rgba(249, 242, 237, 0.14)"/>
         <!-- More body text -->
         <rect x="20" y="146" width="280" height="6" rx="3" fill="rgba(249, 242, 237, 0.14)"/>
         <!-- Second redaction (shorter, like an ID) -->
         <rect x="20" y="170" width="80" height="6" rx="3" fill="rgba(249, 242, 237, 0.14)"/>
-        <rect x="108" y="166" width="84" height="14" rx="2" fill="rgba(249, 242, 237, 0.78)"/>
+        <rect class="demo-bar demo-bar-2" x="108" y="166" width="84" height="14" rx="2" fill="rgba(249, 242, 237, 0.78)"/>
         <rect x="200" y="170" width="200" height="6" rx="3" fill="rgba(249, 242, 237, 0.14)"/>
         <!-- Bottom text -->
         <rect x="20" y="194" width="360" height="6" rx="3" fill="rgba(249, 242, 237, 0.14)"/>
         <rect x="20" y="212" width="240" height="6" rx="3" fill="rgba(249, 242, 237, 0.14)"/>
+        <!-- Scan band (animated, hidden when reduced motion is preferred) -->
+        <rect class="demo-scanline" x="14" y="40" width="452" height="14" rx="7" fill="rgba(249, 242, 237, 0.10)"/>
       </svg>
       <div class="demo-caption">A 30-second walkthrough is on the way.</div>
     </div>
@@ -1202,7 +1262,7 @@
     <div class="problem-callout">
       <em>Each time I paste a big chunk of code or logs into ChatGPT, I'm worried it might contain an API key buried somewhere. Mistakes happen.</em>
       <br/><br/>
-      <strong>That kind of fear is everywhere now.</strong> The "be careful" approach doesn't scale - because people are people, and AI is convenient. Samsung learned this in 2023, when engineers pasted internal source code into ChatGPT and the company subsequently banned generative AI on corporate devices (reported by Bloomberg and The Economist Korea).
+      <strong>That kind of fear is everywhere now.</strong> The "be careful" approach doesn't scale - because people are people, and AI is convenient. Samsung learned this in 2023, when engineers pasted internal source code into ChatGPT and the company subsequently banned generative AI on corporate devices (reported by Bloomberg).
     </div>
   </div>
 </section>
@@ -1296,14 +1356,14 @@
     <p class="section-sub">Trained on the things people regret sharing. Add your own categories in one click.</p>
 
     <div class="detects">
-      <div class="detect"><svg><use href="#i-full-names"/></svg><div class="detect-label">Full names</div></div>
-      <div class="detect"><svg><use href="#i-passport-id"/></svg><div class="detect-label">Passport &amp; ID</div></div>
-      <div class="detect"><svg><use href="#i-card-numbers"/></svg><div class="detect-label">Card numbers</div></div>
-      <div class="detect"><svg><use href="#i-emails"/></svg><div class="detect-label">Emails</div></div>
-      <div class="detect"><svg><use href="#i-phone-numbers"/></svg><div class="detect-label">Phone numbers</div></div>
-      <div class="detect"><svg><use href="#i-addresses"/></svg><div class="detect-label">Addresses</div></div>
-      <div class="detect"><svg><use href="#i-faces"/></svg><div class="detect-label">Faces</div></div>
-      <div class="detect"><svg><use href="#i-signatures"/></svg><div class="detect-label">Signatures</div></div>
+      <div class="detect"><svg aria-hidden="true"><use href="#i-full-names"/></svg><div class="detect-label">Full names</div></div>
+      <div class="detect"><svg aria-hidden="true"><use href="#i-passport-id"/></svg><div class="detect-label">Passport &amp; ID</div></div>
+      <div class="detect"><svg aria-hidden="true"><use href="#i-card-numbers"/></svg><div class="detect-label">Card numbers</div></div>
+      <div class="detect"><svg aria-hidden="true"><use href="#i-emails"/></svg><div class="detect-label">Emails</div></div>
+      <div class="detect"><svg aria-hidden="true"><use href="#i-phone-numbers"/></svg><div class="detect-label">Phone numbers</div></div>
+      <div class="detect"><svg aria-hidden="true"><use href="#i-addresses"/></svg><div class="detect-label">Addresses</div></div>
+      <div class="detect"><svg aria-hidden="true"><use href="#i-faces"/></svg><div class="detect-label">Faces</div></div>
+      <div class="detect"><svg aria-hidden="true"><use href="#i-signatures"/></svg><div class="detect-label">Signatures</div></div>
     </div>
   </div>
 </section>
@@ -1354,7 +1414,7 @@
             <td>You can verify what it does</td>
             <td class="bad">Trust their policies</td>
             <td class="bad">Trust their policies</td>
-            <td class="col-omitt good">Open detection engine</td>
+            <td class="col-omitt good">Open detection engine (at launch)</td>
           </tr>
           <tr>
             <td>Time per document</td>
@@ -1386,7 +1446,7 @@
       </div>
       <div>
         <div class="stat-num">Open</div>
-        <div class="stat-label">detection engine published for audit</div>
+        <div class="stat-label">detection engine published for audit at launch</div>
       </div>
     </div>
   </div>
@@ -1423,7 +1483,7 @@
           <li>All 8 detection categories</li>
           <li>Unlimited redactions</li>
           <li>Custom rules and saved profiles</li>
-          <li>Browser extension</li>
+          <li>Browser extension included when it ships</li>
           <li>No watermark</li>
           <li>1 year of feature updates included</li>
           <li>Optional $24/yr after for ongoing updates</li>
@@ -1434,7 +1494,7 @@
       <div class="price-card">
         <div class="price-tier">Team</div>
         <div class="price-amount"><sup>$</sup>10</div>
-        <div class="price-period">per user / month, billed annually at $96/yr (3-seat min)</div>
+        <div class="price-period">per user / month, or $96/user/year billed annually (3-seat min)</div>
         <div class="price-desc">For small firms with shared policies and a compliance angle.</div>
         <ul class="price-features">
           <li>Everything in Pro</li>
@@ -1447,7 +1507,7 @@
         <a href="mailto:hello@omitt.app?subject=omitt%20for%20teams" class="price-cta">Talk to us</a>
       </div>
     </div>
-    <div class="pricing-note">Every early access user gets <strong>Pro free for life</strong> when we launch. No catch. Launching at <strong>$39 founding price</strong> for the first 30 days.</div>
+    <div class="pricing-note">The first 200 early access users get <strong>Pro free for life</strong> when we launch. No catch. Launching at <strong>$39 founding price</strong> for the first 30 days.</div>
   </div>
 </section>
 
@@ -1473,7 +1533,7 @@
       </details>
       <details class="faq-item">
         <summary style="color: var(--ink);">What about my profession's confidentiality rules?</summary>
-        <p style="color: var(--ink-soft);">In February 2026, Judge Rakoff of the SDNY ruled in <em>United States v. Heppner</em> that conversations with a consumer AI tool (Claude) are not protected by attorney-client privilege or the work-product doctrine. Some enterprise AI plans (ChatGPT Enterprise, Claude for Enterprise) now offer BAA paths for healthcare, but the underlying issue remains: your data has left your device. omitt keeps the protected information on your machine - so the privilege/HIPAA/NDA question never arises in the first place.</p>
+        <p style="color: var(--ink-soft);">In February 2026, Judge Rakoff of the SDNY ruled in <em>United States v. Heppner</em> that conversations with a consumer AI tool (Claude) are not protected by attorney-client privilege or the work-product doctrine. Some enterprise AI plans (ChatGPT Enterprise, Claude Enterprise) now offer BAA paths for healthcare, but the underlying issue remains: your data has left your device. omitt keeps the protected information on your machine - so the privilege/HIPAA/NDA question never arises in the first place.</p>
       </details>
       <details class="faq-item">
         <summary style="color: var(--ink);">What happens after my first year of Pro?</summary>
@@ -1493,11 +1553,11 @@
       </details>
       <details class="faq-item">
         <summary style="color: var(--ink);">Is the detection engine open source?</summary>
-        <p style="color: var(--ink-soft);">Yes. The rules, regex sets and ML models that decide "this is a name" are published on GitHub. The app itself is proprietary. You can audit what we look for, even if you don't run the code.</p>
+        <p style="color: var(--ink-soft);">Yes - that's the commitment. The rules, regex sets and ML models that decide "this is a name" will be published on GitHub at launch. The app itself stays proprietary. You'll be able to audit what we look for, even if you don't run the code.</p>
       </details>
       <details class="faq-item">
         <summary style="color: var(--ink);">What if I find a false positive or negative?</summary>
-        <p style="color: var(--ink-soft);">You toggle it off in the review screen. omitt learns your preferences for next time on your machine - that pattern stays local too.</p>
+        <p style="color: var(--ink-soft);">You toggle it off in the review screen. During beta, that kind of miss is exactly the feedback that shapes the detection rules.</p>
       </details>
     </div>
   </div>
@@ -1510,15 +1570,17 @@
     <p class="lede">Private beta opens to 200 people. Early access gets Pro free for life - no card, no upsell, no follow-up emails except the invite.</p>
 
     <form class="signup" novalidate onsubmit="return handleSignup(event, 'bottom')">
-      <input type="email" name="email" placeholder="your@work-email.com" aria-label="Email" />
+      <input type="email" name="email" placeholder="your@work-email.com" aria-label="Email" autocomplete="email" />
       <input type="text" name="_gotcha" tabindex="-1" autocomplete="off" style="position:absolute;left:-9999px;width:1px;height:1px;opacity:0;" aria-hidden="true" />
       <button type="submit">Join the waitlist</button>
     </form>
     <div class="form-error" id="error-bottom" role="alert" aria-live="polite"></div>
     <div class="form-note">One email when the beta opens. Nothing else.</div>
-    <div class="form-success" id="success-bottom">Thanks. You're on the list. We'll email when the beta opens.</div>
+    <div class="form-success" id="success-bottom" role="status">Thanks. You're on the list. We'll email when the beta opens.</div>
   </div>
 </section>
+
+</main>
 
 <!-- Mobile sticky CTA - only shows after scrolling past hero -->
 <a href="#access" class="mobile-sticky-cta" aria-label="Get early access">Get early access →</a>
@@ -1526,10 +1588,12 @@
 <!-- =========== FOOTER =========== -->
 <footer>
   <div class="wrap">
-    <img class="footer-logo" src="assets/svg/icon.svg" alt="" />
+    <img class="footer-logo" src="/assets/svg/icon.svg" alt="" />
     <div class="footer-text">© 2026 omitt. A careful utility, made by humans who like privacy.</div>
+    <div class="footer-text">No cookies. No analytics. No trackers - this page included.</div>
     <div>
       <a href="mailto:hello@omitt.app">hello@omitt.app</a>
+      <a href="/privacy">Privacy</a>
     </div>
   </div>
 </footer>
@@ -1581,6 +1645,7 @@
       const input = form.querySelector('input[type="email"]');
       if (input) {
         input.classList.add("is-invalid");
+        input.setAttribute("aria-invalid", "true");
         input.focus();
       }
     }
@@ -1595,7 +1660,10 @@
     }
     if (form) {
       const input = form.querySelector('input[type="email"]');
-      if (input) input.classList.remove("is-invalid");
+      if (input) {
+        input.classList.remove("is-invalid");
+        input.removeAttribute("aria-invalid");
+      }
     }
   }
 
@@ -1625,12 +1693,6 @@
     }
     clearFormError(where);
 
-    try {
-      const list = JSON.parse(localStorage.getItem("omitt_waitlist") || "[]");
-      if (!list.includes(email)) list.push(email);
-      localStorage.setItem("omitt_waitlist", JSON.stringify(list));
-    } catch (err) {}
-
     // Honeypot: if a bot fills the hidden _gotcha field, silently fake success and exit
     const gotcha = form.querySelector('input[name="_gotcha"]');
     if (gotcha && gotcha.value) {
@@ -1639,9 +1701,11 @@
       return false;
     }
 
+    const button = form.querySelector('button[type="submit"]');
     if (FORM_ENDPOINT) {
       try {
-        await fetch(FORM_ENDPOINT, {
+        if (button) { button.disabled = true; button.textContent = "Joining…"; }
+        const res = await fetch(FORM_ENDPOINT, {
           method: "POST",
           headers: { "Accept": "application/json", "Content-Type": "application/json" },
           body: JSON.stringify({
@@ -1650,8 +1714,12 @@
             _subject: "New omitt waitlist signup (" + where + ")"
           })
         });
+        if (!res.ok) throw new Error("HTTP " + res.status);
       } catch (err) {
-        console.error("Signup error", err);
+        // Honest failure: don't pretend it worked
+        if (button) { button.disabled = false; button.textContent = where === "hero" ? "Get early access" : "Join the waitlist"; }
+        showFormError(where, "Something went wrong sending this. Mind trying again in a minute? If it keeps failing, email hello@omitt.app.");
+        return false;
       }
     }
 
