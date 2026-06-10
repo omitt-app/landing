@@ -4,7 +4,7 @@
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 <title>omitt - Hide sensitive data before you share</title>
-<meta name="description" content="Drop a file. omitt redacts names, IDs, and faces on your Mac before you paste into ChatGPT, Claude, or anywhere. The original never moves." />
+<meta name="description" content="Drop a file. omitt redacts names, IDs, and emails on your Mac before you paste into ChatGPT, Claude, or anywhere. The original never moves." />
 
 <!-- Theme color & icons -->
 <meta name="theme-color" content="#0D0D0C">
@@ -597,6 +597,15 @@
     font-weight: 700;
     letter-spacing: -0.01em;
   }
+  .detect-soon {
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 0.07em;
+    text-transform: uppercase;
+    color: var(--ink-mute);
+    margin-top: 5px;
+  }
+  section:not(.invert) .detect-soon { color: var(--cream-mute); }
 
   /* ============================
      COMPARISON TABLE
@@ -1187,7 +1196,7 @@
   <div class="wrap">
     <img class="hero-mark" src="/assets/svg/icon.svg" alt="" width="96" height="96" />
     <h1>Hide sensitive data <br/>before you share.</h1>
-    <p class="lede">Drop a file. omitt redacts names, IDs, and faces right on your Mac. Paste the clean copy into ChatGPT, Claude, or anywhere. The original never moves.</p>
+    <p class="lede">Drop a file. omitt redacts names, IDs, and emails right on your Mac. Paste the clean copy into ChatGPT, Claude, or anywhere. The original never moves.</p>
 
     <form class="signup" novalidate onsubmit="return handleSignup(event, 'hero')">
       <input type="email" name="email" placeholder="your@work-email.com" aria-label="Email" autocomplete="email" />
@@ -1253,8 +1262,8 @@
         <div class="stat-source">Verizon DBIR, 2026</div>
       </div>
       <div class="stat-card">
-        <div class="stat-num">$0</div>
-        <div class="stat-label">amount you can spend to undo a paste after the fact</div>
+        <div class="stat-num">None</div>
+        <div class="stat-label">privilege protection for what you tell a consumer AI tool</div>
         <div class="stat-source">U.S. v. Heppner, SDNY 2026</div>
       </div>
     </div>
@@ -1283,7 +1292,7 @@
       <div class="step">
         <div class="step-num">2</div>
         <h3>Review the highlights</h3>
-        <p>omitt marks every name, ID, card and address it finds. Toggle each one. Add your own with one click.</p>
+        <p>omitt marks every name, ID, email and phone number it finds. Toggle each one. Add your own with one click.</p>
       </div>
       <div class="step">
         <div class="step-num">3</div>
@@ -1358,12 +1367,12 @@
     <div class="detects">
       <div class="detect"><svg aria-hidden="true"><use href="#i-full-names"/></svg><div class="detect-label">Full names</div></div>
       <div class="detect"><svg aria-hidden="true"><use href="#i-passport-id"/></svg><div class="detect-label">Passport &amp; ID</div></div>
-      <div class="detect"><svg aria-hidden="true"><use href="#i-card-numbers"/></svg><div class="detect-label">Card numbers</div></div>
+      <div class="detect"><svg aria-hidden="true"><use href="#i-card-numbers"/></svg><div class="detect-label">Card numbers</div><div class="detect-soon">coming</div></div>
       <div class="detect"><svg aria-hidden="true"><use href="#i-emails"/></svg><div class="detect-label">Emails</div></div>
       <div class="detect"><svg aria-hidden="true"><use href="#i-phone-numbers"/></svg><div class="detect-label">Phone numbers</div></div>
-      <div class="detect"><svg aria-hidden="true"><use href="#i-addresses"/></svg><div class="detect-label">Addresses</div></div>
-      <div class="detect"><svg aria-hidden="true"><use href="#i-faces"/></svg><div class="detect-label">Faces</div></div>
-      <div class="detect"><svg aria-hidden="true"><use href="#i-signatures"/></svg><div class="detect-label">Signatures</div></div>
+      <div class="detect"><svg aria-hidden="true"><use href="#i-addresses"/></svg><div class="detect-label">Addresses</div><div class="detect-soon">coming</div></div>
+      <div class="detect"><svg aria-hidden="true"><use href="#i-faces"/></svg><div class="detect-label">Faces</div><div class="detect-soon">coming</div></div>
+      <div class="detect"><svg aria-hidden="true"><use href="#i-signatures"/></svg><div class="detect-label">Signatures</div><div class="detect-soon">coming</div></div>
     </div>
   </div>
 </section>
@@ -1466,7 +1475,7 @@
         <div class="price-period">forever, no card</div>
         <div class="price-desc">For trying it out and for occasional use.</div>
         <ul class="price-features">
-          <li>All 8 detection categories visible in preview</li>
+          <li>All detection categories visible in preview</li>
           <li>3 clean exports per week</li>
           <li>PDF and image support</li>
           <li>Subtle watermark on exports</li>
@@ -1480,7 +1489,7 @@
         <div class="price-period">one-time, lifetime license</div>
         <div class="price-desc">For professionals who use AI daily and can't afford a slip.</div>
         <ul class="price-features">
-          <li>All 8 detection categories</li>
+          <li>Every detection category as it ships</li>
           <li>Unlimited redactions</li>
           <li>Custom rules and saved profiles</li>
           <li>Browser extension included when it ships</li>
@@ -1507,7 +1516,7 @@
         <a href="mailto:hello@omitt.app?subject=omitt%20for%20teams" class="price-cta">Talk to us</a>
       </div>
     </div>
-    <div class="pricing-note">The first 200 early access users get <strong>Pro free for life</strong> when we launch. No catch. Launching at <strong>$39 founding price</strong> for the first 30 days.</div>
+    <div class="pricing-note">The first 200 early access users get <strong>Pro free for life</strong> when we launch. No catch. Launching at <strong>$39 founding price</strong> for the first 90 days.</div>
   </div>
 </section>
 
