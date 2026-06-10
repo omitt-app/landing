@@ -72,7 +72,7 @@ Before every push to `main`, scan the diff for:
 ### What IS safe to commit
 - HTML, CSS, JS for the page
 - Brand assets in `assets/`
-- The Formspree endpoint `xpqnypyn` (designed to be public with domain whitelisting + spam protection)
+- The Loops.so form endpoint URL (designed to be public; bot protection via honeypot field)
 - README, LICENSE, this CLAUDE.md
 
 If anything in the diff looks suspicious, abort the commit and investigate.
@@ -129,10 +129,10 @@ Never use any other color. If you think you need an accent, you don't.
 ## Forms
 
 Two waitlist forms on the page:
-- Hero form: `id="error-hero"`, submits with `source=hero`
-- Final CTA form: `id="error-bottom"`, submits with `source=bottom`
+- Hero form: `id="error-hero"`, submits with `userGroup=hero`
+- Final CTA form: `id="error-bottom"`, submits with `userGroup=bottom`
 
-Both submit to the same Formspree endpoint. Source tracking lets us measure where signups come from.
+Both submit to the same Loops.so form endpoint (urlencoded POST: `email` + `userGroup`). The `userGroup` tag lets us measure where signups come from. A 409 response means "already on the list" and is treated as success.
 
 ### Custom validation (NOT native HTML5)
 - `<form novalidate>` with custom inline JS
@@ -145,7 +145,7 @@ Both submit to the same Formspree endpoint. Source tracking lets us measure wher
 ### Don't
 - Don't switch back to native HTML5 validation messages (robotic, breaks voice)
 - Don't remove honeypot fields (bots would contaminate the list)
-- Don't remove either form without first reviewing the source ratio in Formspree
+- Don't remove either form without first reviewing the userGroup ratio in Loops
 
 ---
 

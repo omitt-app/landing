@@ -1608,8 +1608,8 @@
 </footer>
 
 <script>
-  // Lightweight client-side capture. Replace FORM_ENDPOINT with Formspree/Loops/ConvertKit URL when ready.
-  const FORM_ENDPOINT = "https://formspree.io/f/xpqnypyn"; // e.g. "https://formspree.io/f/your-id"
+  // Loops.so waitlist form endpoint (urlencoded POST: email + userGroup for source tracking)
+  const FORM_ENDPOINT = "https://app.loops.so/api/newsletter-form/cmq80qxqe37js0jy5qp6b1w5w";
 
   // Toggle mobile sticky CTA after user scrolls past hero,
   // hide near final CTA so it doesn't overlap with the form.
@@ -1716,14 +1716,11 @@
         if (button) { button.disabled = true; button.textContent = "Joining…"; }
         const res = await fetch(FORM_ENDPOINT, {
           method: "POST",
-          headers: { "Accept": "application/json", "Content-Type": "application/json" },
-          body: JSON.stringify({
-            email: email,
-            source: where,
-            _subject: "New omitt waitlist signup (" + where + ")"
-          })
+          headers: { "Content-Type": "application/x-www-form-urlencoded" },
+          body: "email=" + encodeURIComponent(email) + "&userGroup=" + encodeURIComponent(where)
         });
-        if (!res.ok) throw new Error("HTTP " + res.status);
+        // 409 = this email is already on the list - success from the visitor's side
+        if (!res.ok && res.status !== 409) throw new Error("HTTP " + res.status);
       } catch (err) {
         // Honest failure: don't pretend it worked
         if (button) { button.disabled = false; button.textContent = where === "hero" ? "Get early access" : "Join the waitlist"; }
