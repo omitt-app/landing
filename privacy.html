@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Privacy - omitt</title>
+<meta name="description" content="What omitt collects (one email, if you give it), what it doesn't (everything else), and how to be removed." />
+
+<meta name="theme-color" content="#0D0D0C">
+<link rel="icon" type="image/svg+xml" href="/assets/svg/favicon.svg">
+<link rel="icon" type="image/png" sizes="32x32" href="/assets/png/icon-32.png">
+<link rel="apple-touch-icon" sizes="180x180" href="/assets/png/apple-touch-icon-180.png">
+<link rel="canonical" href="https://omitt.app/privacy">
+
+<link rel="stylesheet" href="/assets/fonts/fonts.css">
+
+<style>
+  :root {
+    --ink:        #0D0D0C;
+    --cream:      #F9F2ED;
+    --cream-soft: rgba(249, 242, 237, 0.70);
+    --cream-mute: rgba(249, 242, 237, 0.55);
+    --cream-line: rgba(249, 242, 237, 0.10);
+    --radius:     14px;
+    --radius-pill: 999px;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font-family: var(--font-body);
+    background: var(--ink);
+    color: var(--cream);
+    line-height: 1.6;
+    -webkit-font-smoothing: antialiased;
+    font-weight: 400;
+  }
+  a:focus-visible { outline: 2px solid var(--cream); outline-offset: 3px; border-radius: 4px; }
+  .wrap { max-width: 720px; margin: 0 auto; padding: 0 24px; }
+
+  nav {
+    padding: 16px 0;
+    border-bottom: 1px solid var(--cream-line);
+  }
+  nav .row { display: flex; justify-content: space-between; align-items: center; }
+  .logo {
+    display: flex; align-items: center; gap: 10px;
+    text-decoration: none; color: var(--cream);
+  }
+  .logo-icon { width: 36px; height: 36px; display: block; }
+  .logo-text {
+    font-family: var(--font-display);
+    font-size: 22px; font-weight: 800;
+    letter-spacing: -0.035em; line-height: 1;
+  }
+  nav .back {
+    color: var(--cream-soft);
+    text-decoration: none;
+    font-size: 14px; font-weight: 600;
+    transition: color .15s;
+  }
+  nav .back:hover { color: var(--cream); }
+
+  main { padding: 72px 0 96px; }
+  .eyebrow {
+    font-size: 13px; font-weight: 700;
+    letter-spacing: 0.08em; text-transform: uppercase;
+    color: var(--cream-mute);
+    margin-bottom: 18px;
+  }
+  h1 {
+    font-family: var(--font-display);
+    font-size: clamp(34px, 5vw, 52px);
+    font-weight: 800;
+    letter-spacing: -0.025em;
+    line-height: 1.05;
+    margin-bottom: 14px;
+  }
+  .updated {
+    font-size: 14px;
+    color: var(--cream-mute);
+    margin-bottom: 48px;
+  }
+  h2 {
+    font-family: var(--font-display);
+    font-size: 22px; font-weight: 800;
+    letter-spacing: -0.018em;
+    margin: 44px 0 12px;
+  }
+  p, li {
+    font-size: 16px;
+    color: var(--cream-soft);
+  }
+  p + p { margin-top: 12px; }
+  ul { margin: 12px 0 0 20px; }
+  li { margin-bottom: 8px; }
+  strong { color: var(--cream); font-weight: 700; }
+  main a { color: var(--cream); font-weight: 600; text-decoration: underline; text-underline-offset: 3px; }
+
+  footer {
+    padding: 40px 0;
+    text-align: center;
+    color: var(--cream-mute);
+    font-size: 13px;
+    border-top: 1px solid var(--cream-line);
+  }
+  footer a {
+    color: var(--cream-mute);
+    text-decoration: none;
+    margin: 0 12px;
+    font-weight: 600;
+  }
+  footer a:hover { color: var(--cream); }
+
+  @media (max-width: 480px) {
+    main { padding: 48px 0 64px; }
+    .logo-icon { width: 32px; height: 32px; }
+    .logo-text { font-size: 19px; }
+  }
+</style>
+</head>
+<body>
+
+<nav>
+  <div class="wrap row">
+    <a href="/" class="logo" aria-label="omitt home">
+      <img class="logo-icon" src="/assets/svg/icon.svg" alt="" />
+      <span class="logo-text">omitt</span>
+    </a>
+    <a href="/" class="back">&larr; Back to the site</a>
+  </div>
+</nav>
+
+<main>
+  <div class="wrap">
+    <div class="eyebrow">Privacy</div>
+    <h1>Short, because there's<br/>little to disclose.</h1>
+    <p class="updated">Last updated: June 10, 2026</p>
+
+    <p>omitt exists so your data doesn't end up where it shouldn't. That standard applies to this website too. Here is everything it does with your data - the full list is short.</p>
+
+    <h2>What we collect</h2>
+    <p><strong>One email address, only if you type it in.</strong> When you join the waitlist, we store the email you give us and which form you used (top or bottom of the page). That's the complete list.</p>
+
+    <h2>What we use it for</h2>
+    <ul>
+      <li>One email when the beta opens.</li>
+      <li>One email when the product launches.</li>
+    </ul>
+    <p>No newsletters, no marketing sequences, no sharing or selling. The legal basis is your consent - you gave us the address for exactly this purpose.</p>
+
+    <h2>What we don't do</h2>
+    <ul>
+      <li>No cookies.</li>
+      <li>No analytics or tracking scripts.</li>
+      <li>No advertising pixels or fingerprinting.</li>
+      <li>No selling or sharing of your address with anyone.</li>
+    </ul>
+
+    <h2>Who processes the data</h2>
+    <ul>
+      <li><strong>Loops</strong> (loops.so, USA) stores waitlist signups and sends our emails on our behalf.</li>
+      <li><strong>Vercel, Inc.</strong> (USA) hosts this site. Like any web host, it keeps standard, short-lived server logs (IP address, browser type) for security and operations.</li>
+    </ul>
+
+    <h2>How long we keep it</h2>
+    <p>Until the product launches and the waitlist has done its job, or until you ask to be removed - whichever comes first.</p>
+
+    <h2>Your rights</h2>
+    <p>You can ask what we hold about you, ask for a copy, or ask to be deleted. One email to <a href="mailto:dpo@omitt.app">dpo@omitt.app</a> and it's done - usually within days, always within 30.</p>
+
+    <h2>The app itself</h2>
+    <p>When omitt ships, it processes your files entirely on your Mac. Files are never uploaded, and the app makes no outbound network calls during detection or redaction. The app's privacy policy will live here alongside this one when the beta opens.</p>
+
+    <h2>Questions</h2>
+    <p>Write to <a href="mailto:hello@omitt.app">hello@omitt.app</a>. A human reads it.</p>
+  </div>
+</main>
+
+<footer>
+  <div class="wrap">
+    <div>© 2026 omitt. A careful utility, made by humans who like privacy.</div>
+    <div style="margin-top: 10px;">
+      <a href="mailto:hello@omitt.app">hello@omitt.app</a>
+      <a href="/">Home</a>
+    </div>
+  </div>
+</footer>
+
+</body>
+</html>
