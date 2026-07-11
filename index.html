@@ -28,7 +28,47 @@
 <meta name="twitter:image" content="https://omitt.app/assets/png/og-image.png">
 
 <!-- Font (self-hosted Nunito variable) -->
+<link rel="preload" href="/assets/fonts/Nunito-Variable.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="stylesheet" href="/assets/fonts/fonts.css">
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "Organization",
+      "@id": "https://omitt.app/#org",
+      "name": "omitt",
+      "url": "https://omitt.app/",
+      "email": "hello@omitt.app",
+      "logo": "https://omitt.app/assets/png/apple-touch-icon-180.png",
+      "description": "Privacy-first macOS app that redacts sensitive data on-device before you paste it into AI tools."
+    },
+    {
+      "@type": "WebSite",
+      "@id": "https://omitt.app/#website",
+      "url": "https://omitt.app/",
+      "name": "omitt",
+      "publisher": { "@id": "https://omitt.app/#org" },
+      "inLanguage": "en"
+    },
+    {
+      "@type": "SoftwareApplication",
+      "name": "omitt",
+      "operatingSystem": "macOS",
+      "applicationCategory": "SecurityApplication",
+      "url": "https://omitt.app/",
+      "publisher": { "@id": "https://omitt.app/#org" },
+      "description": "Detects and redacts names, IDs, emails, card numbers, and API keys on your Mac before you paste into ChatGPT, Claude, or Gemini. 100% on-device. The original never moves.",
+      "offers": {
+        "@type": "Offer",
+        "price": "0",
+        "priceCurrency": "USD",
+        "description": "Free to download and use, with an optional one-time Pro upgrade."
+      }
+    }
+  ]
+}
+</script>
 
 <style>
   :root {
