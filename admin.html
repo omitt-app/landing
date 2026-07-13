@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<meta name="robots" content="noindex, nofollow">
+<meta name="robots" content="noindex, nofollow, noarchive">
 <title>omitt - admin</title>
 <link rel="icon" href="/favicon.ico">
 <link rel="stylesheet" href="/assets/fonts/fonts.css">
@@ -27,7 +27,7 @@
   .stat span { font-size:12px; opacity:.55; }
   .item { border-top:1px solid rgba(249,242,237,.1); padding:14px 0; }
   .item:first-child { border-top:0; }
-  .meta { font-size:12px; opacity:.55; margin-bottom:6px; display:flex; gap:10px; flex-wrap:wrap; align-items:center; }
+  .meta { font-size:12px; color:rgba(249,242,237,.62); margin-bottom:6px; display:flex; gap:10px; flex-wrap:wrap; align-items:center; }
   .badge { border:1px solid rgba(249,242,237,.25); border-radius:20px; padding:1px 10px; }
   .badge.new { background:var(--cream); color:var(--ink); border-color:var(--cream); font-weight:700; }
   .msg { color:rgba(249,242,237,.85); white-space:pre-wrap; margin-bottom:8px; }
@@ -44,17 +44,17 @@
 
   <div id="login" class="card">
     <div class="row" style="flex-direction:column; align-items:stretch; gap:10px;">
-      <input id="email" type="email" placeholder="admin email" autocomplete="username">
-      <input id="password" type="password" placeholder="password" autocomplete="current-password">
+      <input id="email" type="email" placeholder="admin email" aria-label="Admin email" autocomplete="username">
+      <input id="password" type="password" placeholder="password" aria-label="Password" autocomplete="current-password">
       <button id="loginBtn">Sign in</button>
-      <div id="loginErr" class="err hidden"></div>
+      <div id="loginErr" class="err hidden" role="alert" aria-live="polite"></div>
     </div>
   </div>
 
   <div id="panel" class="hidden">
     <div class="stats" id="stats"></div>
     <div class="toolbar">
-      <select id="filter">
+      <select id="filter" aria-label="Feedback filter">
         <option value="active">New + read</option>
         <option value="new">New only</option>
         <option value="all">Everything</option>
@@ -96,36 +96,72 @@ async function refresh() {
     bugs: all.filter(r => r.category === 'bug').length,
     ideas: all.filter(r => r.category === 'idea').length,
   };
-  $('stats').innerHTML = `
-    <div class="stat"><b>${stats.total}</b><span>shown</span></div>
-    <div class="stat"><b>${stats.fresh}</b><span>new</span></div>
-    <div class="stat"><b>${stats.week}</b><span>last 7 days</span></div>
-    <div class="stat"><b>${stats.bugs}</b><span>bugs</span></div>
-    <div class="stat"><b>${stats.ideas}</b><span>ideas</span></div>`;
+  const statItems = [
+    [stats.total, 'shown'], [stats.fresh, 'new'], [stats.week, 'last 7 days'],
+    [stats.bugs, 'bugs'], [stats.ideas, 'ideas'],
+  ];
+  $('stats').replaceChildren(...statItems.map(([value, label]) => {
+    const item = document.createElement('div');
+    item.className = 'stat';
+    const count = document.createElement('b');
+    const name = document.createElement('span');
+    count.textContent = String(value);
+    name.textContent = label;
+    item.append(count, name);
+    return item;
+  }));
 
-  $('list').innerHTML = all.length ? '' : 'Nothing here yet.';
+  $('list').replaceChildren();
+  if (!all.length) $('list').textContent = 'Nothing here yet.';
   for (const r of all) {
     const el = document.createElement('div');
     el.className = 'item';
     const date = new Date(r.created_at).toLocaleString();
-    el.innerHTML = `
-      <div class="meta">
-        <span class="badge ${r.status === 'new' ? 'new' : ''}">${r.status}</span>
-        <span class="badge">${r.category}</span>
-        <span>${date}</span>
-        ${r.app_version ? `<span>v${r.app_version}</span>` : ''}
-        ${r.email ? `<a href="mailto:${r.email}">${r.email}</a>` : ''}
-      </div>
-      <div class="msg"></div>
-      <div class="row">
-        ${r.status === 'new' ? '<button class="ghost" data-act="read">Mark read</button>' : ''}
-        ${r.status !== 'archived' ? '<button class="ghost" data-act="archived">Archive</button>' : '<button class="ghost" data-act="new">Unarchive</button>'}
-      </div>`;
-    el.querySelector('.msg').textContent = r.message; // textContent - no HTML injection
-    el.querySelectorAll('button').forEach(b => b.onclick = async () => {
-      await db.from('feedback').update({ status: b.dataset.act }).eq('id', r.id);
-      refresh();
-    });
+    const meta = document.createElement('div');
+    meta.className = 'meta';
+    const addMeta = (value, className = '') => {
+      const span = document.createElement('span');
+      span.className = className;
+      span.textContent = value;
+      meta.appendChild(span);
+    };
+    addMeta(String(r.status), `badge${r.status === 'new' ? ' new' : ''}`);
+    addMeta(String(r.category), 'badge');
+    addMeta(date);
+    if (r.app_version) addMeta(`v${String(r.app_version)}`);
+    if (r.email) {
+      const email = String(r.email);
+      const link = document.createElement('a');
+      link.textContent = email;
+      link.href = `mailto:${encodeURIComponent(email)}`;
+      meta.appendChild(link);
+    }
+
+    const message = document.createElement('div');
+    message.className = 'msg';
+    message.textContent = String(r.message);
+    const actions = document.createElement('div');
+    actions.className = 'row';
+    const makeAction = (label, action) => {
+      const button = document.createElement('button');
+      button.className = 'ghost';
+      button.textContent = label;
+      button.onclick = async () => {
+        button.disabled = true;
+        const { error: updateError } = await db.from('feedback').update({ status: action }).eq('id', r.id);
+        if (updateError) {
+          button.disabled = false;
+          $('list').prepend(document.createTextNode(`Could not update: ${updateError.message} `));
+          return;
+        }
+        refresh();
+      };
+      actions.appendChild(button);
+    };
+    if (r.status === 'new') makeAction('Mark read', 'read');
+    if (r.status !== 'archived') makeAction('Archive', 'archived');
+    else makeAction('Unarchive', 'new');
+    el.append(meta, message, actions);
     $('list').appendChild(el);
   }
 }

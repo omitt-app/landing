@@ -4,7 +4,7 @@
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 <title>omitt - Hide sensitive data before you share</title>
-<meta name="description" content="Drop a file. omitt redacts names, IDs, and emails on your Mac before you paste into ChatGPT, Claude, or anywhere. The original never moves." />
+<meta name="description" content="Review and redact sensitive text, secrets, faces, and barcodes from PDFs and images on your Mac before you share. The original never moves." />
 
 <!-- Theme color & icons -->
 <meta name="theme-color" content="#0D0D0C">
@@ -17,7 +17,7 @@
 
 <!-- Social share -->
 <meta property="og:title" content="omitt - Hide sensitive data before you share" />
-<meta property="og:description" content="Drop any file. omitt hides what shouldn't leave your Mac before you paste into AI. The original never moves." />
+<meta property="og:description" content="Drop a PDF, image, or screenshot. omitt hides what shouldn't leave your Mac before you paste into AI. The original never moves." />
 <meta property="og:type" content="website" />
 <meta property="og:url" content="https://omitt.app/" />
 <meta property="og:site_name" content="omitt" />
@@ -58,13 +58,7 @@
       "applicationCategory": "SecurityApplication",
       "url": "https://omitt.app/",
       "publisher": { "@id": "https://omitt.app/#org" },
-      "description": "Detects and redacts names, IDs, emails, card numbers, and API keys on your Mac before you paste into ChatGPT, Claude, or Gemini. 100% on-device. The original never moves.",
-      "offers": {
-        "@type": "Offer",
-        "price": "0",
-        "priceCurrency": "USD",
-        "description": "Free to download and use, with an optional one-time Pro upgrade."
-      }
+      "description": "Detects and redacts names, verified IDs, emails, card numbers, API keys, IP addresses, faces, and barcodes on your Mac before you paste into ChatGPT, Claude, or Gemini. The original never moves."
     }
   ]
 }
@@ -460,6 +454,11 @@
     color: var(--cream-mute);
     margin-top: 14px;
     letter-spacing: 0.01em;
+  }
+  .stat-source a {
+    color: inherit;
+    text-decoration: underline;
+    text-underline-offset: 3px;
   }
   .problem-callout {
     background: rgba(249, 242, 237, 0.04);
@@ -1210,7 +1209,8 @@
   <symbol id="i-phone-numbers" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><rect x="6" y="2.5" width="12" height="19" rx="2.5"/><line x1="10" y1="5.5" x2="14" y2="5.5"/><circle cx="12" cy="18.5" r=".9" fill="currentColor" stroke="none"/></symbol>
   <symbol id="i-addresses" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M3 11.5L12 3.5l9 8v9a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1z"/><path d="M9.5 21v-5.5a1 1 0 0 1 1-1h3a1 1 0 0 1 1 1V21"/></symbol>
   <symbol id="i-faces" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M4 8V6a2 2 0 0 1 2-2h2 M16 4h2a2 2 0 0 1 2 2v2 M20 16v2a2 2 0 0 1-2 2h-2 M8 20H6a2 2 0 0 1-2-2v-2"/><circle cx="12" cy="12" r="3.2"/></symbol>
-  <symbol id="i-signatures" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M4 14.5c0-2.5 3-3.5 4-1.5s-2 4.5 0 4.5 4-3 6-3 1.5 3 3.5 2.5 3.5-2 3.5-2"/><path d="M3 20.5h18"/></symbol>
+  <symbol id="i-barcodes" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round"><path d="M4 5v14M7 5v14M11 5v14M14 5v14M16.5 5v14M20 5v14"/></symbol>
+  <symbol id="i-secrets" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><circle cx="8" cy="12" r="4"/><path d="M12 12h9M17 12v3M20 12v2"/></symbol>
 </svg>
 
 <!-- =========== NAV =========== -->
@@ -1236,10 +1236,10 @@
   <div class="wrap">
     <img class="hero-mark" src="/assets/svg/icon.svg" alt="" width="96" height="96" />
     <h1>Hide sensitive data <br/>before you share.</h1>
-    <p class="lede">Drop a file. omitt redacts names, IDs, and emails right on your Mac. Paste the clean copy into ChatGPT, Claude, or anywhere. The original never moves.</p>
+    <p class="lede">Drop a PDF, image, or screenshot. omitt finds sensitive text, secrets, faces, and barcodes on your Mac. You review every mark, then share the clean copy. The original never moves.</p>
 
     <form class="signup" novalidate onsubmit="return handleSignup(event, 'hero')">
-      <input type="email" name="email" placeholder="your@work-email.com" aria-label="Email" autocomplete="email" />
+      <input type="email" name="email" placeholder="your@work-email.com" aria-label="Email" autocomplete="email" inputmode="email" maxlength="320" spellcheck="false" />
       <input type="text" name="_gotcha" tabindex="-1" autocomplete="off" style="position:absolute;left:-9999px;width:1px;height:1px;opacity:0;" aria-hidden="true" />
       <button type="submit">Get early access</button>
     </form>
@@ -1294,24 +1294,24 @@
       <div class="stat-card">
         <div class="stat-num">75%</div>
         <div class="stat-label">of knowledge workers use generative AI at work</div>
-        <div class="stat-source">Microsoft Work Trend Index, 2024</div>
+        <div class="stat-source"><a href="https://www.microsoft.com/en-us/worklab/work-trend-index/ai-at-work-is-here-now-comes-the-hard-part/" target="_blank" rel="noopener">Microsoft Work Trend Index, 2024</a></div>
       </div>
       <div class="stat-card">
         <div class="stat-num">858K</div>
         <div class="stat-label">AI-related data loss events tracked in one year</div>
-        <div class="stat-source">Verizon DBIR, 2026</div>
+        <div class="stat-source"><a href="https://www.verizon.com/business/resources/T343/reports/2026-dbir-data-breach-investigations-report.pdf" target="_blank" rel="noopener">Verizon DBIR, 2026</a></div>
       </div>
       <div class="stat-card">
-        <div class="stat-num">None</div>
-        <div class="stat-label">privilege protection for what you tell a consumer AI tool</div>
-        <div class="stat-source">U.S. v. Heppner, SDNY 2026</div>
+        <div class="stat-num">Not protected</div>
+        <div class="stat-label">consumer AI chats in the court's privilege ruling</div>
+        <div class="stat-source"><a href="https://storage.courtlistener.com/recap/gov.uscourts.nysd.652137/gov.uscourts.nysd.652137.27.0.pdf" target="_blank" rel="noopener">U.S. v. Heppner, SDNY 2026</a></div>
       </div>
     </div>
 
     <div class="problem-callout">
-      <em>Each time I paste a big chunk of code or logs into ChatGPT, I'm worried it might contain an API key buried somewhere. Mistakes happen.</em>
+      <strong>A single log can contain an email, IP address, and API key far outside the line you meant to share.</strong>
       <br/><br/>
-      <strong>That kind of fear is everywhere now.</strong> The "be careful" approach doesn't scale - because people are people, and AI is convenient. Samsung learned this in 2023, when engineers pasted internal source code into ChatGPT and the company subsequently banned generative AI on corporate devices (reported by Bloomberg).
+      A policy that says "be careful" still relies on memory at the exact moment someone wants a fast answer. A small pre-share step is easier to repeat and easier to verify.
     </div>
   </div>
 </section>
@@ -1320,8 +1320,8 @@
 <section class="invert">
   <div class="wrap">
     <div class="eyebrow">How it works</div>
-    <h2>Three seconds. No upload.</h2>
-    <p class="section-sub">Built for the moment between "I need to ask AI" and "wait, this has my passport on it."</p>
+    <h2>One careful step. No upload.</h2>
+    <p class="section-sub">Built for the moment between "I need to ask AI" and "I should check this first."</p>
 
     <div class="steps">
       <div class="step">
@@ -1332,12 +1332,12 @@
       <div class="step">
         <div class="step-num">2</div>
         <h3>Review the highlights</h3>
-        <p>omitt marks every name, ID, email and phone number it finds. Toggle each one. Add your own with one click.</p>
+        <p>omitt flags supported text and visual categories. Toggle any suggestion, select text, or drag across an area it missed.</p>
       </div>
       <div class="step">
         <div class="step-num">3</div>
-        <h3>Paste into AI</h3>
-        <p>The clean copy lands in your clipboard. Cmd+V into ChatGPT, Claude, Gemini, or anywhere. The original never moves.</p>
+        <h3>Copy or save</h3>
+        <p>Copy cleaned text, or save a fresh PNG or PDF. Then use ChatGPT, Claude, Gemini, or any other tool.</p>
       </div>
     </div>
   </div>
@@ -1347,8 +1347,8 @@
 <section id="use-cases">
   <div class="wrap">
     <div class="eyebrow">Use cases</div>
-    <h2>For people who can't<br/>afford a "whoops."</h2>
-    <p class="section-sub">Different jobs, same five seconds before each paste.</p>
+    <h2>For work that deserves<br/>a careful second look.</h2>
+    <p class="section-sub">Different jobs, same check before sensitive material leaves your hands.</p>
 
     <div class="bento">
       <div class="bento-card bento-c1">
@@ -1356,35 +1356,35 @@
           <div class="tag">For lawyers</div>
           <h3>Redact the case file<br/>before AI research.</h3>
         </div>
-        <p>Client names, addresses, SSNs are blurred locally. Privilege stays where it belongs - in your office.</p>
+        <p>Flag common client identifiers locally, review every mark yourself, and share only the cleaned working copy.</p>
       </div>
       <div class="bento-card bento-c2">
         <div>
           <div class="tag">For accountants &amp; CPAs</div>
           <h3>Scrub the return<br/>before AI review.</h3>
         </div>
-        <p>SSNs, account numbers, addresses and income figures redacted locally. Your AICPA duty of confidentiality stays clean.</p>
+        <p>Find SSNs, validated bank IDs, cards, addresses, and contact details. Draw a box over any figure that needs your judgment.</p>
       </div>
       <div class="bento-card bento-c3">
         <div>
           <div class="tag">For engineers</div>
           <h3>Strip PII from logs.</h3>
         </div>
-        <p>Customer emails, IPs, API keys gone before pasting into Claude for a debug.</p>
+        <p>Catch customer emails, IP addresses, API keys, tokens, and JWTs before a log reaches an AI assistant.</p>
       </div>
       <div class="bento-card bento-c4">
         <div>
           <div class="tag">For consultants</div>
           <h3>Clean the deck.</h3>
         </div>
-        <p>Client names and proprietary numbers out before you ask AI to summarize. Your NDA stays clean.</p>
+        <p>Remove client names and contact details, then manually mark any project-specific term before asking AI to summarize.</p>
       </div>
       <div class="bento-card bento-c5">
         <div>
           <div class="tag">For HR</div>
           <h3>Hide the candidate.</h3>
         </div>
-        <p>Names, photos, ages off the resume before AI screens it. Lower bias. Lower EEOC exposure.</p>
+        <p>Hide names, faces, emails, and phone numbers before sharing a resume for a first-pass review.</p>
       </div>
       <div class="bento-card bento-c6">
         <div>
@@ -1402,17 +1402,18 @@
   <div class="wrap">
     <div class="eyebrow">What it sees</div>
     <h2>Finds what you'd forget.</h2>
-    <p class="section-sub">Trained on the things people regret sharing. Add your own categories in one click.</p>
+    <p class="section-sub">Automatic suggestions for high-value categories, plus manual redaction for anything specific to your work.</p>
 
     <div class="detects">
       <div class="detect"><svg aria-hidden="true"><use href="#i-full-names"/></svg><div class="detect-label">Full names</div></div>
-      <div class="detect"><svg aria-hidden="true"><use href="#i-passport-id"/></svg><div class="detect-label">Passport &amp; ID</div></div>
-      <div class="detect"><svg aria-hidden="true"><use href="#i-card-numbers"/></svg><div class="detect-label">Card numbers</div><div class="detect-soon">coming</div></div>
+      <div class="detect"><svg aria-hidden="true"><use href="#i-passport-id"/></svg><div class="detect-label">Structured IDs</div></div>
+      <div class="detect"><svg aria-hidden="true"><use href="#i-card-numbers"/></svg><div class="detect-label">Card numbers</div></div>
       <div class="detect"><svg aria-hidden="true"><use href="#i-emails"/></svg><div class="detect-label">Emails</div></div>
       <div class="detect"><svg aria-hidden="true"><use href="#i-phone-numbers"/></svg><div class="detect-label">Phone numbers</div></div>
-      <div class="detect"><svg aria-hidden="true"><use href="#i-addresses"/></svg><div class="detect-label">Addresses</div><div class="detect-soon">coming</div></div>
-      <div class="detect"><svg aria-hidden="true"><use href="#i-faces"/></svg><div class="detect-label">Faces</div><div class="detect-soon">coming</div></div>
-      <div class="detect"><svg aria-hidden="true"><use href="#i-signatures"/></svg><div class="detect-label">Signatures</div><div class="detect-soon">coming</div></div>
+      <div class="detect"><svg aria-hidden="true"><use href="#i-addresses"/></svg><div class="detect-label">Addresses</div></div>
+      <div class="detect"><svg aria-hidden="true"><use href="#i-faces"/></svg><div class="detect-label">Faces</div></div>
+      <div class="detect"><svg aria-hidden="true"><use href="#i-barcodes"/></svg><div class="detect-label">Barcodes &amp; QR</div></div>
+      <div class="detect"><svg aria-hidden="true"><use href="#i-secrets"/></svg><div class="detect-label">Secrets &amp; IPs</div></div>
     </div>
   </div>
 </section>
@@ -1421,55 +1422,55 @@
 <section>
   <div class="wrap">
     <div class="eyebrow">Why not just&hellip;</div>
-    <h2>The other ways<br/>don't do this.</h2>
-    <p class="section-sub">Most options keep your file moving through someone else's servers. omitt keeps it on your Mac.</p>
+    <h2>A local checkpoint,<br/>not another destination.</h2>
+    <p class="section-sub">omitt sits before the AI tool, produces a clean copy, and keeps the source file on your Mac.</p>
 
     <div class="compare-wrap">
       <table class="compare">
         <thead>
           <tr>
             <th></th>
-            <th>ChatGPT Enterprise</th>
-            <th>Cloud redaction tools</th>
+            <th>Manual cleanup</th>
+            <th>Cloud redaction</th>
             <th class="col-omitt">omitt</th>
           </tr>
         </thead>
         <tbody>
           <tr>
-            <td>Cost</td>
-            <td>~$60 / user / month</td>
-            <td>~$24 / user / month</td>
-            <td class="col-omitt good">$49 once</td>
-          </tr>
-          <tr>
-            <td>Where your file goes</td>
-            <td class="bad">OpenAI servers</td>
-            <td class="bad">Vendor's cloud</td>
+            <td>Where the source goes</td>
+            <td class="good">Stays on your Mac</td>
+            <td class="bad">Vendor's server</td>
             <td class="col-omitt good">Stays on your Mac</td>
           </tr>
           <tr>
-            <td>Works offline</td>
+            <td>Automatic text checks</td>
             <td class="bad">No</td>
+            <td>Varies</td>
+            <td class="col-omitt good">Names, IDs, contact data, secrets</td>
+          </tr>
+          <tr>
+            <td>Faces and barcodes</td>
+            <td class="bad">No</td>
+            <td>Varies</td>
+            <td class="col-omitt good">Yes</td>
+          </tr>
+          <tr>
+            <td>Works offline</td>
+            <td>Yes</td>
             <td class="bad">No</td>
             <td class="col-omitt good">Yes</td>
           </tr>
           <tr>
-            <td>Locked to one AI vendor</td>
-            <td class="bad">Yes (OpenAI only)</td>
-            <td>No</td>
-            <td class="col-omitt good">No - paste anywhere</td>
+            <td>Before any AI tool</td>
+            <td>Only if you remember</td>
+            <td>Yes</td>
+            <td class="col-omitt good">Yes - paste anywhere</td>
           </tr>
           <tr>
-            <td>You can verify what it does</td>
-            <td class="bad">Trust their policies</td>
-            <td class="bad">Trust their policies</td>
-            <td class="col-omitt good">Open detection engine (at launch)</td>
-          </tr>
-          <tr>
-            <td>Time per document</td>
-            <td>Instant (no redaction layer)</td>
-            <td>~30 sec (upload, process)</td>
-            <td class="col-omitt good">~3 sec</td>
+            <td>PDF hidden text removed</td>
+            <td>Depends how you edit it</td>
+            <td>Varies</td>
+            <td class="col-omitt good">Fresh image-only PDF</td>
           </tr>
         </tbody>
       </table>
@@ -1504,9 +1505,9 @@
 <!-- =========== PRICING =========== -->
 <section id="pricing">
   <div class="wrap">
-    <div class="eyebrow">Pricing</div>
+    <div class="eyebrow">Planned launch pricing</div>
     <h2>Pay once.<br/>Own it forever.</h2>
-    <p class="section-sub">A careful utility shouldn't be a subscription. Lifetime license. No upsells. No data resold.</p>
+    <p class="section-sub">The version you buy keeps working. Renew updates only when the next year is worth it to you.</p>
 
     <div class="pricing">
       <div class="price-card">
@@ -1515,10 +1516,10 @@
         <div class="price-period">forever, no card</div>
         <div class="price-desc">For trying it out and for occasional use.</div>
         <ul class="price-features">
-          <li>All detection categories visible in preview</li>
-          <li>3 clean exports per week</li>
-          <li>PDF and image support</li>
-          <li>Subtle watermark on exports</li>
+          <li>Text, PDF, image, and screenshot review</li>
+          <li>Automatic and manual redaction</li>
+          <li>Core detection categories</li>
+          <li>Final usage limit announced before launch</li>
         </ul>
         <a href="#access" class="price-cta">Get early access</a>
       </div>
@@ -1529,13 +1530,12 @@
         <div class="price-period">one-time, lifetime license</div>
         <div class="price-desc">For professionals who use AI daily and can't afford a slip.</div>
         <ul class="price-features">
-          <li>Every detection category as it ships</li>
+          <li>Every individual detection category as it ships</li>
           <li>Unlimited redactions</li>
-          <li>Custom rules and saved profiles</li>
-          <li>Browser extension included when it ships</li>
-          <li>No watermark</li>
+          <li>Quick Redact hotkey</li>
+          <li>PDF, image, screenshot, and clipboard workflows</li>
           <li>1 year of feature updates included</li>
-          <li>Optional $24/yr after for ongoing updates</li>
+          <li>Optional $24/year for later updates</li>
         </ul>
         <a href="#access" class="price-cta">Get Pro free in beta</a>
       </div>
@@ -1544,14 +1544,14 @@
         <div class="price-tier">Team</div>
         <div class="price-amount"><sup>$</sup>10</div>
         <div class="price-period">per user / month, or $96/user/year billed annually (3-seat min)</div>
-        <div class="price-desc">For small firms with shared policies and a compliance angle.</div>
+        <div class="price-desc">Planned after the individual release for small firms that need shared controls.</div>
         <ul class="price-features">
           <li>Everything in Pro</li>
-          <li>Shared detection profiles</li>
-          <li>Local audit log</li>
-          <li>Centralized license keys</li>
-          <li>SSO (coming)</li>
-          <li>Always-updated, priority support</li>
+          <li>Shared detection profiles (planned)</li>
+          <li>Local audit log (planned)</li>
+          <li>Centralized license management (planned)</li>
+          <li>Admin and SSO options (planned)</li>
+          <li>Priority support</li>
         </ul>
         <a href="mailto:hello@omitt.app?subject=omitt%20for%20teams" class="price-cta">Talk to us</a>
       </div>
@@ -1578,15 +1578,15 @@
       </details>
       <details class="faq-item">
         <summary style="color: var(--ink);">Why not use ChatGPT Enterprise?</summary>
-        <p style="color: var(--ink-soft);">Two reasons. First: roughly $60 per user per month adds up fast. Second: your file still leaves your device - it just goes to OpenAI's servers instead of someone else's. ChatGPT Enterprise also locks you to OpenAI, while omitt cleans the file once and lets you paste into Claude, Gemini, or any AI you choose.</p>
+        <p style="color: var(--ink-soft);">Enterprise AI plans can improve contractual and data-control terms, but the file still has to reach that provider. omitt solves a different problem: remove sensitive details locally first, then use the cleaned copy with the AI tool and plan you choose.</p>
       </details>
       <details class="faq-item">
         <summary style="color: var(--ink);">What about my profession's confidentiality rules?</summary>
-        <p style="color: var(--ink-soft);">In February 2026, Judge Rakoff of the SDNY ruled in <em>United States v. Heppner</em> that conversations with a consumer AI tool (Claude) are not protected by attorney-client privilege or the work-product doctrine. Some enterprise AI plans (ChatGPT Enterprise, Claude Enterprise) now offer BAA paths for healthcare, but the underlying issue remains: your data has left your device. omitt keeps the protected information on your machine - so the privilege/HIPAA/NDA question never arises in the first place.</p>
+        <p style="color: var(--ink-soft);">In February 2026, Judge Rakoff of the SDNY ruled in <em>United States v. Heppner</em> that the consumer AI conversations at issue were not protected by attorney-client privilege or the work-product doctrine. omitt helps you minimize what you disclose before using an AI service. It does not provide legal advice or guarantee compliance, privilege, or confidentiality.</p>
       </details>
       <details class="faq-item">
         <summary style="color: var(--ink);">What happens after my first year of Pro?</summary>
-        <p style="color: var(--ink-soft);">Your app keeps working forever. You only pay $24/year if you want to keep receiving new detection categories, OS compatibility updates, and browser extension fixes. No subscription trap - just an honest renewal for ongoing development. This is the CleanShot X model and it works.</p>
+        <p style="color: var(--ink-soft);">The current plan is simple: your licensed version keeps working. After the included year, pay $24 only if you want another year of new categories, compatibility work, and feature updates. Final terms will be shown clearly before purchase.</p>
       </details>
       <details class="faq-item">
         <summary style="color: var(--ink);">Why one-time for individuals but subscription for teams?</summary>
@@ -1594,7 +1594,7 @@
       </details>
       <details class="faq-item">
         <summary style="color: var(--ink);">Which file types work?</summary>
-        <p style="color: var(--ink-soft);">At launch: PDFs, images (PNG, JPG, HEIC), and screenshots. Word and Excel support is on the roadmap. Video frames after that. Waitlist members get to vote on what ships first.</p>
+        <p style="color: var(--ink-soft);">At launch: PDFs, images (PNG, JPG, HEIC, TIFF), screenshots, and copied text. Word and Excel support is on the roadmap. Waitlist members get to vote on what ships next.</p>
       </details>
       <details class="faq-item">
         <summary style="color: var(--ink);">Mac only?</summary>
@@ -1616,15 +1616,15 @@
 <section class="cta-final" id="access">
   <div class="wrap">
     <h2>One small habit.<br/>Before every paste.</h2>
-    <p class="lede">Private beta opens to 200 people. Early access gets Pro free for life - no card, no upsell, no follow-up emails except the invite.</p>
+    <p class="lede">Private beta opens to 200 people. Early access gets Pro free for life - no card and no newsletter sequence.</p>
 
     <form class="signup" novalidate onsubmit="return handleSignup(event, 'bottom')">
-      <input type="email" name="email" placeholder="your@work-email.com" aria-label="Email" autocomplete="email" />
+      <input type="email" name="email" placeholder="your@work-email.com" aria-label="Email" autocomplete="email" inputmode="email" maxlength="320" spellcheck="false" />
       <input type="text" name="_gotcha" tabindex="-1" autocomplete="off" style="position:absolute;left:-9999px;width:1px;height:1px;opacity:0;" aria-hidden="true" />
       <button type="submit">Join the waitlist</button>
     </form>
     <div class="form-error" id="error-bottom" role="alert" aria-live="polite"></div>
-    <div class="form-note">One email when the beta opens. Nothing else.</div>
+    <div class="form-note">Two product emails: beta invite and launch. Nothing else.</div>
     <div class="form-success" id="success-bottom" role="status">Thanks. You're on the list. We'll email when the beta opens.</div>
   </div>
 </section>
