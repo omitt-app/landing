@@ -1,6 +1,6 @@
 <p align="center">
   <a href="https://omitt.app">
-    <img src="assets/png/og-image.png" alt="omitt - Hide sensitive data before you share." width="100%">
+    <img src="assets/png/icon-128.png" alt="omitt" width="96" height="96">
   </a>
 </p>
 
