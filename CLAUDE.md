@@ -167,9 +167,10 @@ Every numeric claim on the site has been web-verified. ONLY use these:
 ## Workflow (current setup)
 
 - User is solo founder, non-developer
-- User commits via GitHub Desktop (visual diff review, not `git` CLI)
-- Don't suggest CLI commands unless asked
-- Don't push directly - user must see the diff first
+- Assistant runs checks, commits, fetches, confirms the target branch, and pushes through CLI
+- Founder uses GitHub Desktop only when a visual review checkpoint is explicitly requested
+- Don't ask the founder to run CLI commands that the assistant can safely run
+- Never force-push or bypass failed checks
 - Single-purpose commits with descriptive messages
 
 ### Commit message format
