@@ -14,6 +14,7 @@
 <p align="center">
   <a href="https://omitt.app">Website</a> ·
   <a href="https://omitt.app/privacy">Privacy</a> ·
+  <a href="https://omitt.app/terms">Beta Terms</a> ·
   <a href="mailto:hello@omitt.app">Contact</a>
 </p>
 
