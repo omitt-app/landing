@@ -6,7 +6,7 @@ Security fixes apply to the current deployment at [omitt.app](https://omitt.app)
 
 ## Report an issue privately
 
-Please email [support@omitt.app](mailto:support@omitt.app) with:
+Please email [hello@omitt.app](mailto:hello@omitt.app) with:
 
 - A clear description of the issue and its impact
 - The affected page or workflow
@@ -19,4 +19,4 @@ We will acknowledge useful reports, investigate them carefully, and coordinate r
 
 ## Privacy boundary
 
-The public website does not process documents. The macOS app performs detection and redaction on-device. Explicit waitlist and feedback submissions send only the fields the user chooses to submit, as described in the [privacy notice](https://omitt.app/privacy).
+The public website does not process documents. The macOS app performs detection and redaction on-device. Waitlist submission is explicit. Choosing Send feedback opens a draft in the user's mail app, and nothing is sent unless the user sends that email, as described in the [privacy notice](https://omitt.app/privacy).
